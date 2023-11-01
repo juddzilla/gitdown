@@ -1,0 +1,8 @@
+{
+  "columns": {
+    "document_id": "TEXT",
+    "user_id": "TEXT"
+  },
+  "name": "document_users",
+  "unique": ["document_id", "user_id"]
+}

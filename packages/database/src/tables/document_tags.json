@@ -1,0 +1,8 @@
+{
+  "columns": {
+    "document_id": "TEXT",
+    "tag": "TEXT"
+  },
+  "name": "document_tags",
+  "unique": ["document_id", "tag"]
+}

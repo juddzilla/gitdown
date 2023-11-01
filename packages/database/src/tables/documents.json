@@ -1,0 +1,13 @@
+{
+  "columns": {
+    "id": "TEXT UNIQUE",
+    "due": "INTEGER",
+    "priority": "INTEGER",
+    "project": "TEXT",
+    "type": "TEXT",
+    "status": "TEXT",
+    "updated": "INTEGER"
+  },
+  "name": "documents",
+  "unique": ["id"]
+}

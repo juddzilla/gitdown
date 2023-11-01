@@ -2,5 +2,10 @@
   "name": "gitdown-host",
   "private": true,
   "type": "module",
-  "version": "1.0.0"
+  "version": "1.0.0",
+  "dependencies": {
+    "fastify": "^4.24.3",
+    "gitdown-utils": "1.0.0",
+    "node-watch": "^0.7.4"
+  }
 }

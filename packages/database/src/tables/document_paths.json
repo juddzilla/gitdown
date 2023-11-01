@@ -1,0 +1,9 @@
+{
+  "columns": {
+    "document_id": "TEXT UNIQUE",
+    "filename": "TEXT",
+    "path": "TEXT"
+  },
+  "name": "document_paths",
+  "unique": ["filename", "path"]
+}

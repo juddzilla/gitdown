@@ -1,0 +1,10 @@
+{
+  "name": "gitdown",
+  "version": "1.0.0",
+  "description": "Markup project management system hosted in git",
+  "main": "index.js",
+  "repository": "https://github.com/juddzilla/gitdown.git",
+  "author": "Judd Hendrix",
+  "license": "GPL-3.0",
+  "private": true
+}

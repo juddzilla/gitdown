@@ -1,12 +1,15 @@
-import Database from '../interfaces/database';
+import Database from '../interfaces/database/';
 
-const handler = (req, res) => {
-  const { query } = req;
+import GitUser from '../services/git-user.js';
 
-  if (Object.keys(query).length === 0) {
-    res.status(204).send({});
-  }
+function handler(req, res) {
+  let { query } = req;
 
+  const user = GitUser();
+
+  query.users = user.email;
+  query.matchAll = 'true';
+  console.log('query', query);
   const params = Object.keys(query).reduce((acc, key) => {
     const value = query[key];
     acc[key] = value.includes(',') ? value.split(',') : value;
@@ -15,12 +18,13 @@ const handler = (req, res) => {
 
   const search = Database.Queries.Search(params);
   res.send({ search });
-};
+}
 
 export const route = {
   handler,
   method: 'get',
-  name: 'Search',
-  path: '/search',
+  name: 'Home',
+  path: '/home',
 };
+
 export default handler;

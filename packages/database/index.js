@@ -1,9 +1,17 @@
-import path from 'path';
+import Lists from './src/queries/lists.js';
+import Populate from './src/queries/populate.js';
+import Search from './src/queries/search.js';
+import Update from './src/queries/update.js';
 
-import Build from './src/build';
-import './src/connection';
+import Queries from "./src/queries/index.js";
 
-const tablePath = path.resolve(process.cwd(), 'src', 'tables', '*.json')
-console.log('tablePAth', tablePath);
-Build(tablePath);
+import Tables from './src/tables/index.js';
 
+export default {
+  Lists,
+  Populate,
+  Queries,
+  Search,
+  Tables,
+  Update,
+};

@@ -1,7 +1,6 @@
-import DB from '../connection';
 import CreateTable from './create-table';
 
-export default (tableInfo) => {
+export default (DB, tableInfo) => {
   const { name } = tableInfo;
   const preparedStatement = 'DROP TABLE IF EXISTS';
   const statement = [preparedStatement, name].join(' ');
@@ -9,7 +8,7 @@ export default (tableInfo) => {
 
   try {
     prepared.run();
-    CreateTable(tableInfo);
+    CreateTable(DB, tableInfo);
   } catch (error) {
     console.warn('Recreate Table Error', error);
   }

@@ -1,6 +1,4 @@
-import DB from "../connection.js";
-
-export default ({ columns, name, unique }) => {
+export default (DB, { columns, name, unique }) => {
   const preparedStatement = 'CREATE TABLE IF NOT EXISTS';
   const columnStatements = Object.keys(columns).map(column => [column, columns[column]].join(' '));
 

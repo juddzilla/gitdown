@@ -6,7 +6,8 @@
   "version": "1.0.0",
   "dependencies": {
     "better-sqlite3": "^9.0.0",
-    "gitdown-utils": "1.0.0"
+    "gitdown-utils": "1.0.0",
+    "moment": "^2.29.4"
   },
   "scripts": {
     "dev": "yarn run start:prod",

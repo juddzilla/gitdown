@@ -1,16 +1,7 @@
-import Database from 'better-sqlite3';
-import fs from 'fs';
+let DB = null;
 
-import ENV from './interfaces/env';
-
-// const path = [DATABASE_LOCATION, DATABASE_NAME].filter(Boolean).join('/');
-// console.log('path', path);
-
-const databaseName = `${ENV.DATABASE_NAME}.db`;
-if (!fs.existsSync(databaseName)){
-  fs.createWriteStream(databaseName);
+export function setDatabase(database) {
+  DB = database;
 }
-console.log('databaseName',databaseName);
-const db = new Database(databaseName);
 
-export default db;
+export default DB;

@@ -1,14 +1,14 @@
 import Database from '../interfaces/database';
 
 const handler = (req, res) => {
-  const values = Database.Queries.Distinct(req.query.name);
-  return res.send(values);
+  const values = Database.Queries.Lists();
+  return res.send({ ...values });
 }
 
 export const route = {
   method: 'get',
-  name: 'Distinct',
-  path: '/distinct',
+  name: 'Lists',
+  path: '/lists',
   handler,
 };
 

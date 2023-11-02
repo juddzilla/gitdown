@@ -1,6 +1,12 @@
 {
   "name": "gitdown-markdown",
+  "main": "index.js",
   "private": true,
   "type": "module",
-  "version": "1.0.0"
+  "version": "1.0.0",
+  "dependencies": {
+    "front-matter": "^4.0.2",
+    "gitdown-utils": "1.0.0",
+    "nanoid": "^5.0.2"
+  }
 }

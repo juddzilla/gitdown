@@ -1,6 +1,4 @@
-export default async (config) => {
-  // build db
-  // read files
-  // start app server
-  // start client
-};
+import DefaultConfig from './gitup.default_config';
+import InitDB from './packages/database/src/init';
+
+InitDB(DefaultConfig);

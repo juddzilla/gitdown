@@ -1,6 +1,6 @@
 export default {
-  databaseLocation: './test/database',
+  databaseLocation: './gitdown/database',
   databaseName: 'gitdown',
   databaseTablesDir: './packages/database/src/tables/*.js',
-  markdownFiles: './test/files/*.md',
+  markdownFiles: './gitdown/markdown',
 };

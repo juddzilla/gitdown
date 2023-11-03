@@ -62,3 +62,4 @@ dist/
 *.env
 .*
 image_history
+*.db

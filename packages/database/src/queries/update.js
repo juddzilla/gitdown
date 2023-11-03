@@ -1,4 +1,4 @@
-import Tables from '../tablesold/index.js';
+import Tables from '../models/index.js';
 
 const {
   DocumentPath,

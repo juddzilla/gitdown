@@ -1,17 +1,19 @@
 import path from 'path';
 import Base from './base.js';
 
+import tableInfo from '../schemas/document_paths.json' assert { type: 'json' };
+
 import Utils from '../interfaces/utils';
 
-export const tableInfo = {
-  columns: {
-    document_id: 'TEXT UNIQUE',
-    filename: 'TEXT',
-    path: 'TEXT',
-  },
-  name: 'document_paths',
-  unique: ['filename', 'path'],
-};
+// export const tableInfo = {
+//   columns: {
+//     document_id: 'TEXT UNIQUE',
+//     filename: 'TEXT',
+//     path: 'TEXT',
+//   },
+//   name: 'document_paths',
+//   unique: ['filename', 'path'],
+// };
 
 class DocumentPaths extends Base {
   create(documentId, filepath) {
@@ -27,13 +29,12 @@ class DocumentPaths extends Base {
 
   findAndRemove(filepath) {
     const pathNoCWD = Utils.RelativePath(filepath);
-    // const data = { path: pathNoCWD };
     const parsed = path.parse(pathNoCWD);
     const { base, dir } = parsed;
     const existing = this.find({ filename: base, path: dir });
 
     if (existing) {
-      this.ops.removeMany(tableInfo.name, data);
+      this.ops.removeMany(tableInfo.name, { document_id: existing.document_id });
       return existing.document_id;
     }
     return false;

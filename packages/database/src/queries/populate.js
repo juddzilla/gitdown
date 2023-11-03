@@ -1,11 +1,11 @@
-import Tables from '../tablesold/index.js';
+import Models from '../models';
 
 const {
   DocumentPath,
   Documents,
   DocumentTags,
   DocumentUsers,
-} = Tables;
+} = Models;
 
 export default function (data) {
   if (!Object.hasOwn(data, 'id')) {

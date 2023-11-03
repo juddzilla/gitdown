@@ -1,6 +1,7 @@
 import { WebSocketServer } from 'ws';
 import Routing from '../routing/index.js';
-import { WEBSOCKET_HOST_PORT } from '../../../env.js';
+
+let ws = null;
 
 class WebSocketHost {
   constructor({ messageHandler, port }) {
@@ -21,24 +22,29 @@ class WebSocketHost {
   }
 
   sendMessage(message) {
-    const stringified = JSON.stringify(message);
-    console.log('@@@@@@@ HOST sent', stringified);
-    this.ws.send(stringified);
+    if (this.ws) {
+      const stringified = JSON.stringify(message);
+      console.log('@@@@@@@ HOST sent', stringified);
+      this.ws.send(stringified);
+    }
   }
 }
 
-
-function messageHandler(message) {
-  const { type } = message;
-  if (type && Object.hasOwn(Routing, type)) {
-    Routing[type](message);
+export function init({ port }) {
+  function messageHandler(message) {
+    const { type } = message;
+    if (type && Object.hasOwn(Routing, type)) {
+      Routing[type](message);
+    }
+    console.log('^^^^ SERVER RECEIVED', message);
   }
-  console.log('^^^^ SERVER RECEIVED', message);
+
+  ws = new WebSocketHost({
+    messageHandler,
+    port: parseInt(port, 10),
+  });
 }
 
-const port = parseInt(WEBSOCKET_HOST_PORT, 10);
+export default () => ws;
 
-export default new WebSocketHost({
-  messageHandler,
-  port,
-});
+// export default ws;

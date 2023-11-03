@@ -36,8 +36,20 @@ const stringifyMetadata = (attributes) => Object
 
 export default class MarkdownHandler {
   constructor(filepath) {
-    console.log('!!!!!!', filepath);
     this.filepath = filepath;
+  }
+
+  async createNewDocument() {
+    this.body = '';
+    this.metadata = {
+      priority: '',
+      project: '',
+      status: '',
+      tags: [],
+      type: [],
+      users: [],
+    };
+    await this.createNewId();
   }
 
   async createNewId() {
@@ -63,17 +75,21 @@ export default class MarkdownHandler {
     };
   }
 
-  async init(metadata) {
+  async init() {
     try {
-      console.log('this.filepath', this.filepath);
       const data = await readFile(this.filepath, 'utf8');
       const content = FrontMatter(data);
       const { attributes, body } = content;
-      const md = metadata ? metadata : attributes;
+      if (!Object.hasOwn(attributes, 'id')) {
+        await this.createNewDocument();
+      }
+
+      const md = this.metadata ? this.metadata : attributes;
       this.body = cleanBody(body);
       this.setMetadata(md);
     } catch (e) {
       console.log('INIT', e);
+      return false;
     }
 
   }

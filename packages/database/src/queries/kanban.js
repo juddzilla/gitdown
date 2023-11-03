@@ -1,6 +1,6 @@
-import StringToArray from '../../utils/strToArray.js';
+import Utils from '../interfaces/utils';
 
-import DB from "../connection.js";
+import DB from "../instance/connection.js";
 import moment from "moment";
 
 import {
@@ -8,7 +8,26 @@ import {
   keyEqualsOrIn,
   truthyValue,
 } from '../utils.js';
-import Statuses, { activeStatuses, inactiveStatuses } from '../../config/statuses.js';
+
+export const inactiveStatuses = [
+  'Approved',
+  'Cancelled',
+  'Closed',
+  'Done',
+  'Rejected',
+];
+
+export const activeStatuses = [
+  'Draft',
+  'To Do',
+  'Open',
+  'In Progress',
+  'In Review',
+  'Under Review',
+];
+
+const Statuses = [...activeStatuses, ...inactiveStatuses];
+
 
 const consolidate = (results) => {
   const many = {
@@ -73,7 +92,7 @@ export default function(params) {
     ];
 
     if (toArray.includes(key)) {
-      rest[key] = StringToArray(rest[key]);
+      rest[key] = Utils.StringToArray(rest[key]);
     }
   });
 

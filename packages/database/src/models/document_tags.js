@@ -1,15 +1,16 @@
 import Base from './base.js';
 
 import Utils from '../interfaces/utils';
+import tableInfo from '../schemas/document_tags.json' assert { type: 'json' };
 
-export const tableInfo = {
-  columns: {
-    document_id: 'TEXT',
-    tag: 'TEXT',
-  },
-  name: 'document_tags',
-  unique: ['document_id', 'tag'],
-};
+// export const tableInfo = {
+//   columns: {
+//     document_id: 'TEXT',
+//     tag: 'TEXT',
+//   },
+//   name: 'document_tags',
+//   unique: ['document_id', 'tag'],
+// };
 
 class DocumentTags extends Base {
   create(documentId, tags) {

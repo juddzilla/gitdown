@@ -2,7 +2,7 @@ import Database from '../interfaces/database';
 
 import Markdown from './markdown.js';
 
-const { DocumentPath } = Database.Tables;
+const { DocumentPath } = Database.Models;
 
 const handler = async (req, res) => {
   const data = req.body;

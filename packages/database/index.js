@@ -5,13 +5,17 @@ import Update from './src/queries/update.js';
 
 import Queries from "./src/queries/index.js";
 
-import Tables from './src/tables/index.js';
+import Models from './src/models/index.js';
+
+import Initialize from './src/instance/init';
+
+export const initialize = Initialize;
 
 export default {
   Lists,
   Populate,
+  Models,
   Queries,
   Search,
-  Tables,
   Update,
 };

@@ -1,7 +1,8 @@
-import DB from '../connection.js';
+import DB from '../instance/connection.js';
 
 import { keyEqualsOrIn, keyEqualsStringArray, keyInStringArray } from '../utils.js';
 
+/*
 const createTable = ({ columns, name, unique }) => {
   const preparedStatement = 'CREATE TABLE IF NOT EXISTS';
   const columnStatements = Object.keys(columns).map(column => [column, columns[column]].join(' '));
@@ -39,17 +40,18 @@ export const recreateTable = (tableInfo) => {
   }
 };
 
+*/
 
 
 
 const insertInto = (tableName) => `INSERT INTO ${tableName}`;
 
-export const distinctColumn = (tableName, column) => {
-  const statement = `SELECT DISTINCT ${column} FROM ${tableName} ORDER BY ${column} ASC;`;
-  const prepared = DB.prepare(statement);
-  const results = prepared.all();
-  return results.map((result) => result[column]);
-};
+// export const distinctColumn = (tableName, column) => {
+//   const statement = `SELECT DISTINCT ${column} FROM ${tableName} ORDER BY ${column} ASC;`;
+//   const prepared = DB.prepare(statement);
+//   const results = prepared.all();
+//   return results.map((result) => result[column]);
+// };
 
 export const find = (tableName, condition) => {
   const preparedStatement = `SELECT rowid, * FROM ${tableName} WHERE`;

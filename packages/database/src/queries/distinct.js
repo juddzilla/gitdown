@@ -1,5 +1,4 @@
-import Connection from '../connection.js';
-const DB = Connection.getInstance();
+import DB from '../instance/connection.js';
 
 const map = {
   priority: 'SELECT distinct priority from documents',

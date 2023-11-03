@@ -4,6 +4,7 @@
   "type": "module",
   "version": "1.0.0",
   "dependencies": {
+    "@fastify/cors": "^8.4.1",
     "fastify": "^4.24.3",
     "gitdown-database": "1.0.0",
     "gitdown-markdown": "1.0.0",

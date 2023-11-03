@@ -1,4 +1,7 @@
-export default (DB, { columns, name, unique }) => {
+import Instance from '../instance/connection';
+
+export default ({ columns, name, unique }) => {
+  const DB = Instance();
   const preparedStatement = 'CREATE TABLE IF NOT EXISTS';
   const columnStatements = Object.keys(columns).map(column => [column, columns[column]].join(' '));
 

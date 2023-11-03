@@ -3,5 +3,8 @@
   "main": "src/index.js",
   "private": true,
   "type": "module",
-  "version": "1.0.0"
+  "version": "1.0.0",
+  "dependencies": {
+    "glob": "^10.3.10"
+  }
 }

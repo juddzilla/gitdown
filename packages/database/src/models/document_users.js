@@ -1,15 +1,16 @@
 import Base from './base.js';
 
 import Utils from '../interfaces/utils';
+import tableInfo from '../schemas/document_users.json' assert { type: 'json' };
 
-export const tableInfo = {
-  columns: {
-    document_id: 'TEXT',
-    user_id: 'TEXT',
-  },
-  name: 'document_users',
-  unique: ['document_id', 'user_id'],
-};
+// export const tableInfo = {
+//   columns: {
+//     document_id: 'TEXT',
+//     user_id: 'TEXT',
+//   },
+//   name: 'document_users',
+//   unique: ['document_id', 'user_id'],
+// };
 
 class DocumentUsers extends Base {
   create(documentId, users) {

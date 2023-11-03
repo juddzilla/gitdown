@@ -1,17 +1,19 @@
 import Base from './base.js';
 
-export const tableInfo = {
-  columns: {
-    id: 'TEXT UNIQUE',
-    due: 'INTEGER',
-    priority: 'INTEGER',
-    project: 'TEXT',
-    type: 'TEXT',
-    status: 'TEXT',
-    updated: 'INTEGER',
-  },
-  name: 'documents',
-};
+import tableInfo from '../schemas/documents.json' assert { type: 'json' };
+
+// export const tableInfo = {
+//   columns: {
+//     id: 'TEXT UNIQUE',
+//     due: 'INTEGER',
+//     priority: 'INTEGER',
+//     project: 'TEXT',
+//     type: 'TEXT',
+//     status: 'TEXT',
+//     updated: 'INTEGER',
+//   },
+//   name: 'documents',
+// };
 
 class Documents extends Base {
   create(data) {

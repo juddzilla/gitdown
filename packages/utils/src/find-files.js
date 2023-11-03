@@ -1,4 +1,4 @@
-import glob from 'glob';
+import { glob } from 'glob';
 
 export default async (directoryStart) => {
   try {

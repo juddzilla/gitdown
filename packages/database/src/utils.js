@@ -16,6 +16,15 @@ export const keyEqualsStringArray = (data) => Object.keys(data)
   })
   .join(',');
 
+export const keyEqualsStringArrayAnd = (data) => Object.keys(data)
+    .map((key) => {
+      const value = data[key];
+      const val = Number.isInteger(value) ? value : `'${value}'`;
+      if (truthyValue(value)) {
+        return `${key} = ${val}`;
+      }
+    })
+    .join(' AND ');
 
 export const keyInStringArray = (data) => Object.keys(data)
   .map((key) => {

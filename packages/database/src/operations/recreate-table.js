@@ -1,6 +1,9 @@
+import Instance from '../instance/connection';
+
 import CreateTable from './create-table';
 
-export default (DB, tableInfo) => {
+export default (tableInfo) => {
+  const DB = Instance();
   const { name } = tableInfo;
   const preparedStatement = 'DROP TABLE IF EXISTS';
   const statement = [preparedStatement, name].join(' ');
@@ -8,7 +11,7 @@ export default (DB, tableInfo) => {
 
   try {
     prepared.run();
-    CreateTable(DB, tableInfo);
+    CreateTable(tableInfo);
   } catch (error) {
     console.warn('Recreate Table Error', error);
   }

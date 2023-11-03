@@ -1,0 +1,7 @@
+{
+  "columns": {
+    "email": "TEXT UNIQUE",
+    "name": "TEXT"
+  },
+  "name": "users"
+}

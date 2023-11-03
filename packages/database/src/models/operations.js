@@ -1,8 +1,14 @@
-import DB from '../connection.js';
+import Instance from '../instance/connection';
 
-import { keyEqualsOrIn, keyEqualsStringArray, keyInStringArray } from '../utils.js';
+import {
+  keyEqualsOrIn,
+  keyEqualsStringArray,
+  keyEqualsStringArrayAnd,
+  keyInStringArray,
+} from '../utils.js';
 
 const createTable = ({ columns, name, unique }) => {
+  const DB = Instance();
   const preparedStatement = 'CREATE TABLE IF NOT EXISTS';
   const columnStatements = Object.keys(columns).map(column => [column, columns[column]].join(' '));
 
@@ -24,6 +30,7 @@ const createTable = ({ columns, name, unique }) => {
 };
 
 export const recreateTable = (tableInfo) => {
+  const DB = Instance();
   const { name } = tableInfo;
   const preparedStatement = 'DROP TABLE IF EXISTS';
   const statement = [preparedStatement, name].join(' ');
@@ -41,6 +48,7 @@ export const recreateTable = (tableInfo) => {
 const insertInto = (tableName) => `INSERT INTO ${tableName}`;
 
 export const distinctColumn = (tableName, column) => {
+  const DB = Instance();
   const statement = `SELECT DISTINCT ${column} FROM ${tableName} ORDER BY ${column} ASC;`;
   const prepared = DB.prepare(statement);
   const results = prepared.all();
@@ -48,8 +56,9 @@ export const distinctColumn = (tableName, column) => {
 };
 
 export const find = (tableName, condition) => {
+  const DB = Instance();
   const preparedStatement = `SELECT rowid, * FROM ${tableName} WHERE`;
-  const query = keyEqualsStringArray(condition);
+  const query = keyEqualsStringArrayAnd(condition);
 
   const statement = [preparedStatement, query].join(' ');
   const prepared = DB.prepare(statement);
@@ -63,6 +72,7 @@ export const find = (tableName, condition) => {
 };
 
 export const getMany = (tableName, condition) => {
+  const DB = Instance();
   const preparedStatement = `SELECT rowid, * FROM ${tableName} WHERE`;
   const query = keyEqualsOrIn(condition).join(' AND ');
 
@@ -82,6 +92,7 @@ export const getMany = (tableName, condition) => {
 };
 
 export const getManyForOne = (tableName, one, many) => {
+  const DB = Instance();
   const preparedStatement = `SELECT rowid, * FROM ${tableName} WHERE`;
   const oneStatement = keyEqualsStringArray(one);
   const manyStatement = keyInStringArray(many);
@@ -101,6 +112,7 @@ export const getManyForOne = (tableName, one, many) => {
 };
 
 export const insert = (tableName, data) => {
+  const DB = Instance();
   const preparedStatement = insertInto(tableName);
   const keys = Object.keys(data);
   const keysStatement = `(${keys.join(',')})`;
@@ -126,6 +138,7 @@ export const insert = (tableName, data) => {
 };
 
 export const insertOneToMany = (tableName, one, many) => {
+  const DB = Instance();
   const preparedStatement = insertInto(tableName);
   const keys = Object.keys({ ...one, ...many }).join(',');
   const keysStatement = `(${keys})`;
@@ -168,6 +181,7 @@ export const insertOneToMany = (tableName, one, many) => {
 };
 
 export const removeMany = (tableName, condition) => {
+  const DB = Instance();
   const preparedStatement = `DELETE FROM ${tableName} WHERE`;
   const query = keyEqualsOrIn(condition).join(' AND ');
   const statement = [preparedStatement, query].join(' ');
@@ -186,6 +200,7 @@ export const removeMany = (tableName, condition) => {
 };
 
 export const update = (tableName, condition, data) => {
+  const DB = Instance();
   const preparedStatement = `UPDATE ${tableName} SET`;
   const queryBlocks = [preparedStatement];
   const setBlocks = keyEqualsStringArray(data);

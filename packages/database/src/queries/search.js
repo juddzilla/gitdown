@@ -1,6 +1,6 @@
 import moment from 'moment';
 
-import DB from '../connection.js';
+import DB from '../instance/connection.js';
 
 import {
   arrayValueStatement,

@@ -1,4 +1,4 @@
-import Database from '../interfaces/database/';
+import Database from '../interfaces/database';
 
 import GitUser from '../services/git-user.js';
 

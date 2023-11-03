@@ -1,12 +1,14 @@
 import Base from './base.js';
 
-export const tableInfo = {
-  columns: {
-    email: 'TEXT UNIQUE',
-    name: 'TEXT',
-  },
-  name: 'users',
-};
+import tableInfo from '../schemas/users.json' assert { type: 'json' };
+
+// export const tableInfo = {
+//   columns: {
+//     email: 'TEXT UNIQUE',
+//     name: 'TEXT',
+//   },
+//   name: 'users',
+// };
 
 class Users extends Base {
   create(data) {

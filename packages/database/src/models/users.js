@@ -1,7 +1,8 @@
+import { readFile } from 'fs/promises';
 import Base from './base.js';
 
-import tableInfo from '../schemas/users.json' assert { type: 'json' };
-
+// import tableInfo from '../schemas/users.json' assert { type: 'json' };
+const tableInfo = JSON.parse(await readFile(new URL('../schemas/users.json', import.meta.url)));
 // export const tableInfo = {
 //   columns: {
 //     email: 'TEXT UNIQUE',

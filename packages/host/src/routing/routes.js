@@ -5,9 +5,10 @@ import Utils from '../interfaces/utils';
 
 // const { workingDir } = config;
 
+export const paths = path.resolve('src', 'routes', '**', '*.js');
+
 export default async () => {
-  const directoryStart = path.join(process.cwd(), 'packages', 'host', 'src', 'routes', '**', '*.js');
-  const filepaths = await Utils.FindFiles(directoryStart);
+  const filepaths = await Utils.FindFiles(paths);
   const routes = await Promise.all(filepaths.map(async (handler) => {
     const { route } = await import(handler);
 

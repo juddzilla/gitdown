@@ -2,56 +2,7 @@ import DB from '../instance/connection.js';
 
 import { keyEqualsOrIn, keyEqualsStringArray, keyInStringArray } from '../utils.js';
 
-/*
-const createTable = ({ columns, name, unique }) => {
-  const preparedStatement = 'CREATE TABLE IF NOT EXISTS';
-  const columnStatements = Object.keys(columns).map(column => [column, columns[column]].join(' '));
-
-  if (unique) {
-
-    const preparedUnique = `UNIQUE(${ unique.join(',') })`;
-    columnStatements.push(preparedUnique);
-  }
-
-
-
-  const preparedColumns = columnStatements.join(',')
-  const statement = [preparedStatement, `${name}(`, `${ preparedColumns });`].join(' ');
-  const prepared = DB.prepare(statement);
-
-  try {
-    prepared.run();
-  } catch (err) {
-    console.log('Create Table Error', err);
-  }
-};
-
-export const recreateTable = (tableInfo) => {
-  const { name } = tableInfo;
-  const preparedStatement = 'DROP TABLE IF EXISTS';
-  const statement = [preparedStatement, name].join(' ');
-  const prepared = DB.prepare(statement);
-
-  try {
-    prepared.run();
-    createTable(tableInfo);
-  } catch (error) {
-    console.warn('Recreate Table Error', error);
-  }
-};
-
-*/
-
-
-
 const insertInto = (tableName) => `INSERT INTO ${tableName}`;
-
-// export const distinctColumn = (tableName, column) => {
-//   const statement = `SELECT DISTINCT ${column} FROM ${tableName} ORDER BY ${column} ASC;`;
-//   const prepared = DB.prepare(statement);
-//   const results = prepared.all();
-//   return results.map((result) => result[column]);
-// };
 
 export const find = (tableName, condition) => {
   const preparedStatement = `SELECT rowid, * FROM ${tableName} WHERE`;

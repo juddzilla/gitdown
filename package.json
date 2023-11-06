@@ -11,11 +11,13 @@
   ],
   "private": true,
   "devDependencies": {
-    "dotenv-cli": "^7.3.0"
+    "dotenv-cli": "^7.3.0",
+    "ttab": "^0.8.0",
+    "wsrun": "^5.2.4"
   },
   "type": "module",
   "scripts": {
-    "dev": "node --experimental-modules --experimental-specifier-resolution=node ./src/run.js",
+    "dev": "yarn wsrun -p gitdown-host -p gitdown-client -c ttab yarn run dev",
     "start": "node --experimental-modules --experimental-specifier-resolution=node index.js"
   }
 }

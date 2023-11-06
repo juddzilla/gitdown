@@ -1,5 +1,6 @@
 import { readFile, writeFile } from 'fs/promises';
 import fs from 'fs';
+import path from 'path';
 import FrontMatter from 'front-matter';
 import { nanoid } from 'nanoid';
 
@@ -42,11 +43,14 @@ export default class MarkdownHandler {
   async createNewDocument() {
     this.body = '';
     this.metadata = {
+      archived: 0,
+      due: '',
       priority: '',
       project: '',
       status: '',
       tags: [],
       type: [],
+      updated: '',
       users: [],
     };
     await this.createNewId();
@@ -77,8 +81,8 @@ export default class MarkdownHandler {
 
   async init() {
     try {
-      const data = await readFile(this.filepath, 'utf8');
-      const content = FrontMatter(data);
+      const data = await fs.readFileSync(this.filepath);
+      const content = FrontMatter(data.toString());
       const { attributes, body } = content;
       if (!Object.hasOwn(attributes, 'id')) {
         await this.createNewDocument();

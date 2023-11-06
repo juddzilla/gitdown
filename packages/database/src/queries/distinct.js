@@ -11,7 +11,6 @@ export default function(name) {
     const statement = map[name];
     const prepared = DB.prepare(statement);
     const results = prepared.all();
-    console.log('results', results);
     return results.map(result => result[name]).sort();
   }
 }

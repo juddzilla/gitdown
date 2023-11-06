@@ -1,0 +1,50 @@
+{
+  "Users": {
+    "method": "get",
+    "path": "/users"
+  },
+  "User": {
+    "method": "get",
+    "path": "/user"
+  },
+  "UpdateMetadata": {
+    "method": "put",
+    "path": "/metadata/:documentId"
+  },
+  "Search": {
+    "method": "get",
+    "path": "/search"
+  },
+  "Projects": {
+    "method": "get",
+    "path": "/projects"
+  },
+  "Project": {
+    "method": "get",
+    "path": "/project/:name"
+  },
+  "Kanban": {
+    "method": "get",
+    "path": "/kanban"
+  },
+  "Home": {
+    "method": "get",
+    "path": "/home"
+  },
+  "Documents": {
+    "method": "get",
+    "path": "/documents"
+  },
+  "DocumentByPath": {
+    "method": "get",
+    "path": "/document-path/:documentPath"
+  },
+  "DocumentById": {
+    "method": "get",
+    "path": "/documents/:id"
+  },
+  "Distinct": {
+    "method": "get",
+    "path": "/distinct"
+  }
+}

@@ -1,7 +1,10 @@
 import path from 'path';
 import Base from './base.js';
+import { readFile } from 'fs/promises';
 
-import tableInfo from '../schemas/document_paths.json' assert { type: 'json' };
+// import tableInfo from '../schemas/document_paths.json' assert { type: 'json' };
+const tableInfo = JSON.parse(await readFile(new URL('../schemas/document_paths.json', import.meta.url)));
+
 
 import Utils from '../interfaces/utils';
 

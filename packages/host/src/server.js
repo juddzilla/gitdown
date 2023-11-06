@@ -4,28 +4,24 @@ import cors from '@fastify/cors';
 import Routing from './routing/index.js';
 
 const fastify = Fastify({ logger: true });
+fastify.register(cors, { origin: true, credentials: true });
 
-export default async function({ port }) {
-  fastify.register(cors, {
-    origin: (origin, cb) => {
-      const { hostname } = new URL(origin);
-      if (hostname === 'localhost') {
-        cb(null, true);
-        return;
-      }
-      // Generate an error on other origins, disabling access
-      cb(new Error('Not allowed'));
-    },
-  });
-
+export default async function({ port, host }) {
   await Routing(fastify);
 
-  fastify.listen(port, (err) => {
-    if (err) {
-      fastify.log.error(err);
-      process.exit(1);
-    }
+  fastify.listen({ port, host }, (err) => {
+    if (err) { throw err; }
+    console.log('APP SERVER ADDRESS', fastify.server.address()); // eslint-disable-line
+    console.log('Server listening on :', host, port || fastify.server.address().port); // eslint-disable-line
   });
+
+  // fastify.listen(port, (err) => {
+  //   console.log('1');
+  //   if (err) {
+  //     fastify.log.error(err);
+  //     process.exit(1);
+  //   }
+  // });
 
   return fastify;
 }

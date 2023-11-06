@@ -1,16 +1,10 @@
+import { readFile } from 'fs/promises';
+
 import Base from './base.js';
-
 import Utils from '../interfaces/utils';
-import tableInfo from '../schemas/document_tags.json' assert { type: 'json' };
+// import tableInfo from '../schemas/document_tags.json' assert { type: 'json' };
 
-// export const tableInfo = {
-//   columns: {
-//     document_id: 'TEXT',
-//     tag: 'TEXT',
-//   },
-//   name: 'document_tags',
-//   unique: ['document_id', 'tag'],
-// };
+const tableInfo = JSON.parse(await readFile(new URL('../schemas/document_tags.json', import.meta.url)));
 
 class DocumentTags extends Base {
   create(documentId, tags) {

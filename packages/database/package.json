@@ -6,11 +6,12 @@
   "version": "1.0.0",
   "dependencies": {
     "better-sqlite3": "^9.0.0",
+    "gitdown-config": "1.0.0",
     "gitdown-utils": "1.0.0",
     "moment": "^2.29.4"
   },
   "scripts": {
-    "dev": "yarn run start:prod",
+    "dev": "nodemon --config .nodemonrc.json --exec node --experimental-modules --experimental-specifier-resolution=node ./src/instance/init.js ",
     "start:prod": "dotenv -e ../../.dev.env -- node --experimental-modules --experimental-specifier-resolution=node index.js"
   }
 }

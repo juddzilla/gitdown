@@ -73,10 +73,14 @@ export const find = (tableName, condition) => {
 
 export const getMany = (tableName, condition) => {
   const DB = Instance();
-  const preparedStatement = `SELECT rowid, * FROM ${tableName} WHERE`;
-  const query = keyEqualsOrIn(condition).join(' AND ');
+  const preparedStatement = `SELECT rowid, * FROM ${tableName}`;
+  const parts = [preparedStatement];
+  if (condition && Object.keys(condition).length) {
+    const query = keyEqualsOrIn(condition).join(' AND ');
+    parts.push('WHERE', query)
+  }
 
-  const statement = [preparedStatement, query].join(' ');
+  const statement = parts.join(' ');
 
   const prepared = DB.prepare(statement);
   const response = { conditions: condition };

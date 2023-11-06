@@ -1,11 +1,13 @@
 {
   "columns": {
-    "id": "TEXT UNIQUE",
+    "archived": "INTEGER",
     "due": "INTEGER",
+    "id": "TEXT UNIQUE",
     "priority": "INTEGER",
     "project": "TEXT",
-    "type": "TEXT",
     "status": "TEXT",
+    "title": "TEXT",
+    "type": "TEXT",
     "updated": "INTEGER"
   },
   "name": "documents",

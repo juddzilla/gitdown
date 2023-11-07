@@ -10,6 +10,9 @@ const Component = () => {
           <h1>Documents</h1>
         </div>
         <div>
+          <Link to='/create/document'>Create</Link>
+        </div>
+        <div>
           { documents.map((document, index) => (
               <div key={index}>
                 <Link to={`${document.id}`}>

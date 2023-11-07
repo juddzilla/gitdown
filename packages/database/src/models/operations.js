@@ -45,7 +45,7 @@ export const recreateTable = (tableInfo) => {
 };
 
 
-const insertInto = (tableName) => `INSERT INTO ${tableName}`;
+export const insertInto = (tableName) => `INSERT INTO ${tableName}`;
 
 export const distinctColumn = (tableName, column) => {
   const DB = Instance();
@@ -72,6 +72,7 @@ export const find = (tableName, condition) => {
 };
 
 export const getMany = (tableName, condition) => {
+  console.log('gm', tableName, condition);
   const DB = Instance();
   const preparedStatement = `SELECT rowid, * FROM ${tableName}`;
   const parts = [preparedStatement];

@@ -2,7 +2,7 @@ import Database from '../interfaces/database';
 import Markdown from './markdown.js';
 
 const handler = async (req, res) => {
-  const documents = await Database.Models.Documents.list();
+  const documents = await Database.Models.Documents.List();
   return res.send(documents);
 };
 

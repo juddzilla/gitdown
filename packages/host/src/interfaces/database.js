@@ -1,5 +1,5 @@
-import Database, { initialize } from 'gitdown-database';
+import Database from 'gitdown-database';
 
-export default Database;
-
-export const Connection = initialize;
+const instance = await Database();
+console.log(1111111111, instance);
+export default instance;

@@ -1,7 +1,8 @@
-import Database from '../interfaces/database';
+import Domain from '../interfaces/domain';
 
 const handler = async (req, res) => {
-  const projects = await Database.Models.Documents.projects();
+  const projects = await Domain.Projects.List();
+  console.log('OPRJEC', projects);
   return res.send(projects);
 };
 

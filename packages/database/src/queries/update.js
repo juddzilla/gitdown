@@ -1,11 +1,11 @@
-import Tables from '../models/index.js';
+import Models from '../models/index.js';
 
 const {
   DocumentPath,
   Documents,
   DocumentTags,
   DocumentUsers,
-} = Tables;
+} = Models;
 
 export default async function (data) {
   const {
@@ -18,10 +18,10 @@ export default async function (data) {
   const { id } = rest;
 
   try {
-    Documents.update(id, rest);
-    DocumentPath.update(id, filepath);
-    DocumentTags.update(id, tags);
-    DocumentUsers.update(id, users);
+    Documents.Update(id, rest);
+    DocumentPath.Update(id, filepath);
+    DocumentTags.Update(id, tags);
+    DocumentUsers.Update(id, users);
     return data;
   } catch (error) {
     return { error };

@@ -2,6 +2,7 @@ import path from 'path';
 
 // import config from '../../../config.js';
 import Database from '../../interfaces/database';
+console.log('ready inst', Database);
 const { Queries } = Database;
 import Markdown from '../../interfaces/markdown';
 
@@ -10,7 +11,7 @@ export default async function({ files }) {
 
   const directoryStart = path.join(files, '**', fileName);
   const filepaths = await Markdown.Files(directoryStart);
-
+  console.log('filepaths', filepaths);
   filepaths.forEach((async (filepath) => {
     const markdown = await new Markdown.Handler(filepath)
     await markdown.init();

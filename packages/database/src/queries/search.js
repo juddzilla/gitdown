@@ -1,6 +1,6 @@
 import moment from 'moment';
 
-import DB from '../instance/connection.js';
+import Instance from '../instance/connection.js';
 
 import {
   arrayValueStatement,
@@ -49,6 +49,7 @@ const consolidate = (results) => {
 };
 
 export default function (params) {
+  const DB = Instance();
   const {
     matchAll,
     name,

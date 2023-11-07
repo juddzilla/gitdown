@@ -5,7 +5,7 @@ function App() {
   return (
     <>
       <Navigation />
-      <main className="prose max-w-none flex-1">
+      <main className="prose max-w-none flex-1 p-6">
         <Outlet />
       </main>
     </>

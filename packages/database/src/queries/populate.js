@@ -20,8 +20,8 @@ export default function (data) {
 
   const { id } = rest;
 
-  DocumentPath.create(id, filepath);
-  DocumentTags.create(id, tags);
-  DocumentUsers.create(id, users);
-  Documents.create(rest);
+  DocumentPath.Create({ document_id: id }, { filepath });
+  DocumentTags.Create({ document_id: id }, { tag: tags });
+  DocumentUsers.Create({ document_id: id }, { user_id: users });
+  Documents.Create(rest);
 }

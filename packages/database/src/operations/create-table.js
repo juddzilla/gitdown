@@ -1,7 +1,7 @@
 import Instance from '../instance/connection';
 
-export default ({ columns, name, unique }) => {
-  const DB = Instance();
+export default async ({ columns, name, unique }) => {
+  const DB = await Instance();
   const preparedStatement = 'CREATE TABLE IF NOT EXISTS';
   const columnStatements = Object.keys(columns).map(column => [column, columns[column]].join(' '));
 

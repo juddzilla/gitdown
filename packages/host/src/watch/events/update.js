@@ -1,6 +1,7 @@
 import fs from 'fs';
 
 import Database from '../../interfaces/database';
+console.log('DATA', Database);
 import Markdown from '../../interfaces/markdown';
 
 import Server from '../../services/websocket';
@@ -14,25 +15,30 @@ export default async function(filepath) {
   await markdown.init();
   const data = markdown.getMetadata();
 
-  const existingDocumentWithId = DocumentPath.find({ document_id: data.id });
+  const existingDocumentWithId = DocumentPath.Find({ document_id: data.id });
+  console.log('existingDocumentWithId', existingDocumentWithId);
   const { filename, path } = existingDocumentWithId;
   const existingDocumentFilepath = [path, filename].join('/');
-
+  // return;
+  console.log('existingDocumentWithId && existingDocumentFilepath !== filepath',existingDocumentWithId && existingDocumentFilepath !== filepath);
   if (existingDocumentWithId && existingDocumentFilepath !== filepath) {
     const updated = fs.statSync(filepath);
     const existing = fs.statSync(existingDocumentFilepath);
     const updatedFileIsNewer = updated.birthtimeMs > existing.birthtimeMs;
 
     if (updatedFileIsNewer) {
+      console.log(0);
       await markdown.createNewId();
     } else {
+      console.log(1);
       const existingMarkdown = await new Markdown.Handler(existingDocumentFilepath);
       await existingMarkdown.init();
       await existingMarkdown.createNewId();
     }
-    return;
   }
+  console.log('markdown.getMetadata()', markdown.getMetadata());
 
+    return;
   await Update({ ...data, filepath });
   WebSocket.sendMessage({
     document_id: data.id,

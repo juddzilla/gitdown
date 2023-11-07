@@ -1,6 +1,6 @@
 import Utils from '../interfaces/utils';
 
-import DB from "../instance/connection.js";
+import Instance from "../instance/connection.js";
 import moment from "moment";
 
 import {
@@ -76,6 +76,7 @@ const consolidate = (results) => {
 };
 
 export default function(params) {
+  const DB = Instance();
   const {
     matchAll,
     ...rest

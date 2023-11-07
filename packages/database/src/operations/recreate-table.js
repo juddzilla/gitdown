@@ -2,8 +2,8 @@ import Instance from '../instance/connection';
 
 import CreateTable from './create-table';
 
-export default (tableInfo) => {
-  const DB = Instance();
+export default async (tableInfo) => {
+  const DB = await Instance();
   const { name } = tableInfo;
   const preparedStatement = 'DROP TABLE IF EXISTS';
   const statement = [preparedStatement, name].join(' ');

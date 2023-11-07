@@ -1,10 +1,17 @@
 import path from 'path';
 import fs from 'fs';
 import Database from 'better-sqlite3';
+import configure from '../interfaces/config';
+import CreateTables from './build.js';
 
 let DB = null;
 
-export const create = async ({database, directory}) => {
+export const create = async () => {
+  if (DB !== null) {
+    return DB;
+  }
+  const config = await configure();
+  const {database, directory} = config;
   const dbName = `${database}.db`;
   const dbDirectory = path.resolve('../../', directory);
   const dbPath = path.join(dbDirectory, dbName);
@@ -18,6 +25,10 @@ export const create = async ({database, directory}) => {
   return DB;
 }
 
-export default () => {
+export default async () => {
+  if (DB === null) {
+    await create();
+    await CreateTables();
+  }
   return DB;
 };

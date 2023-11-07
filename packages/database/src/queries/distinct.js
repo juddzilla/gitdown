@@ -1,4 +1,4 @@
-import DB from '../instance/connection.js';
+import Instance from '../instance/connection.js';
 
 const map = {
   priority: 'SELECT distinct priority from documents',
@@ -7,6 +7,7 @@ const map = {
 };
 
 export default function(name) {
+  const DB = Instance();
   if (Object.hasOwn(map, name)) {
     const statement = map[name];
     const prepared = DB.prepare(statement);

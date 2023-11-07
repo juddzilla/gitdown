@@ -6,7 +6,6 @@ import RecreateTable from '../operations/recreate-table.js';
 
 const defaultSchemasPath = '../database/src/schemas';
 export default async function() {
-  console.log('^^^^^^^^ BUILD ^^^^^^^^^^');
   const filesList = path.resolve(defaultSchemasPath, '*.json');
   let filepaths = await Utils.FindFiles(filesList);
   const tablesInfo = await Promise.all(filepaths.map(async (handler) => {
@@ -18,6 +17,5 @@ export default async function() {
   tablesInfo.filter(Boolean).forEach(tableInfo => {
     RecreateTable(tableInfo);
   });
-  console.log('^^^^^^^^ BUILD ^^^^^^^^^^');
 }
 

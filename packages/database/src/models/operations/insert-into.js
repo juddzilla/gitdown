@@ -1,0 +1,1 @@
+export default (tableName) => `INSERT INTO ${tableName}`;

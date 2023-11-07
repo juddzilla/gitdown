@@ -11,6 +11,14 @@
     "method": "put",
     "path": "/metadata/:documentId"
   },
+  "Tags": {
+    "method": "get",
+    "path": "/tags"
+  },
+  "Tag": {
+    "method": "get",
+    "path": "/tags/:name"
+  },
   "Search": {
     "method": "get",
     "path": "/search"
@@ -22,6 +30,10 @@
   "Project": {
     "method": "get",
     "path": "/project/:name"
+  },
+  "Lists": {
+    "method": "get",
+    "path": "/lists"
   },
   "Kanban": {
     "method": "get",

@@ -1,0 +1,7 @@
+{
+  "columns": {
+    "name": "TEXT UNIQUE",
+    "id": "TEXT UNIQUE"
+  },
+  "name": "projects"
+}

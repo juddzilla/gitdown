@@ -117,7 +117,7 @@ const MenuBar = () => {
     return configureButton(config);
   };
 
-  const git createSnakeButton = ({ icon, property }, index) => {
+  const createSnakeButton = ({ icon, property }, index) => {
     const lowercased = property.charAt(0).toLowerCase() + property.slice(1);
     const methodName = `toggle${property}`;
 

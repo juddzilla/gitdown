@@ -4,6 +4,8 @@ import { Link, useLoaderData } from 'react-router-dom';
 import API from '../../../interfaces/host';
 import Metadata from './metadata';
 
+import Editor from '../../../components/editor';
+
 const Component = (): ReactElement => {
   const data = useLoaderData();
   console.log('DATA', data);
@@ -39,61 +41,29 @@ const Component = (): ReactElement => {
     );
   };
   return (
-      // <>
-      //   <h1>
-      //     Create new doc
-      //   </h1>
-      //   <div>
-      //     <input
-      //         className=""
-      //         onChange={ titleChange }
-      //         placeholder='Title'
-      //         type="text"
-      //         value={state.title}
-      //     />
-      //   </div>
-      //   <div>
-      //     <h2>Projects</h2>
-      //     { Select({ key: 'project', options: data.projects, value: state.project }) }
-      //   </div>
-      //   <div>
-      //     <h2>Tags</h2>
-      //   </div>
-      //   <div>Users Select</div>
-      //   <div>
-      //     <h2>Type</h2>
-      //     { Select({ key: 'type', options: data.types, value: state.type }) }
-      //   </div>
-      //   <div>
-      //     <h2>Priority</h2>
-      //     { Select({ key: 'priority', options: data.priorities, value: state.priority }) }
-      //   </div>
-      //   <div>
-      //     <h2>Status</h2>
-      //     { Select({ key: 'status', options: data.statuses, value: state.status }) }
-      //   </div>
-      // </>
       <>
         <div className="flex">
-          <div className="flex flex-1 bg-slate-50 px-4">
-            <div className="max-w-prose">
-              <h4 className='uppercase'>Create Document</h4>
-              {/*<h1 className='border-b-2 border-slate-800 border-solid'>{ data.document.title || 'Untitled' }</h1>*/}
-              <div>
-                <label>
-                  Title
-                 <input
-                     className=""
-                     onChange={ titleChange }
-                     placeholder='Title'
-                     type="text"
-                     value={state.title}
-                 />
-                </label>
+          <div>
+            <h4 className='uppercase'>Create Document</h4>
+
+            <div className="flex flex-1 bg-slate-50 p-4">
+              <div className="max-w-prose">
+                <div className='mb-2'>
+                   <input
+                       className='outline-none text-4xl p-2 bg-transparent w-full font-extrabold border-b-2 border-slate-800 border-solid'
+                       onChange={ titleChange }
+                       placeholder='Title'
+                       type="text"
+                       value={state.title}
+                   />
+                </div>
+
+                <div>
+                  <Editor />
+                </div>
               </div>
 
             </div>
-
           </div>
           <Metadata />
         </div>

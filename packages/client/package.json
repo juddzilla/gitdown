@@ -11,6 +11,14 @@
     "tailwind:watch": "npx tailwindcss -i ./src/index.css -o ./dist/output.css --watch"
   },
   "dependencies": {
+    "@tiptap/core": "^2.1.12",
+    "@tiptap/extension-color": "^2.1.12",
+    "@tiptap/extension-link": "^2.1.12",
+    "@tiptap/extension-list-item": "^2.1.12",
+    "@tiptap/extension-text-style": "^2.1.12",
+    "@tiptap/pm": "^2.1.12",
+    "@tiptap/react": "^2.1.12",
+    "@tiptap/starter-kit": "^2.1.12",
     "gitdown-config": "1.0.0",
     "gitdown-host": "1.0.0",
     "marked": "^9.1.5",

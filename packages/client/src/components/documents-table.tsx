@@ -69,12 +69,10 @@ const defaultSort = {
 };
 
 export default (tableInfo):ReactElement => {
-  console.log('data', tableInfo);
   const [data, setData] = useState(tableInfo);
   const [sort, setSort] = useState(defaultSort);
 
   function chooseSort(column) {
-    let direction = 'desc';
     if (sort.column === column) {
       direction = sort.direction === 'desc' ? 'asc' : 'desc';
     }

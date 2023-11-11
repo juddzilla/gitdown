@@ -3,9 +3,11 @@ import type { ReactElement } from 'react';
 
 import API from '../../../interfaces/host';
 
+import SelectOne from '../metadata/single-select';
+import SelectMulti from '../metadata/multi-select';
+
 export default (params): ReactElement => {
-  const { metadata, save, update } = params;
-  console.log('SSS', params);
+  const { metadata, update } = params;
 
   const [list, setList] = useState({
     priorities: [],
@@ -20,17 +22,18 @@ export default (params): ReactElement => {
     // const fetchData = async () => await API.Lists();
     // const response = API.Lists();
     API.Lists().then(res => {
-      console.log('res', res);
       setList(res);
     });
 
   }, [setList]);
 
   function onSelectChange(key, { target }) {
-    console.log('ky', key);
-    console.log('val', target.value);
     update({ ...metadata, [key]: target.value });
     // setState({ ...state, project: target.value });
+  }
+
+  function onChoice(selection) {
+    update({ ...metadata, ...selection });
   }
 
   const Select = (config): ReactElement => {
@@ -49,53 +52,76 @@ export default (params): ReactElement => {
     );
   };
 
-  const SelectArrayOfObj = (config): ReactElement => {
-    const { key, options, value } = config;
-    return (
-        <select value={value} onChange={ onSelectChange.bind(null, key) }>
-          <option value='' key='blank'>
-            -- select --
-          </option>
-          { options.map((option, index) => (
-              <option value={option.name} key={index}>
-                { option.name }
-              </option>
-          ))}
-        </select>
-    );
-  };
+  function updateProperty(value) {
+    update({ ...metadata, ...value });
+  }
 
   return (
-      <div className="bg-slate-100 py-10 px-4 w-72 ml-4">
-        <div onClick={save}>
-          Save
-        </div>
-        <div>
-          Projects
+      <div className="">
+        <div className='bg-slate-100 py-4 px-4 w-72 mb-4'>
           {
-            SelectArrayOfObj({ key: 'project', options: list.projects, value: metadata.project })
+            SelectOne({
+              options: list.projects,
+              property: 'project',
+              selected: metadata.project,
+              setSelected: onChoice,
+              title: 'Projects',
+              update: updateProperty,
+            })
           }
         </div>
-        <div>
-          Types
+        <div className='bg-slate-100 py-4 px-4 w-72 mb-4'>
           {
-            Select({ key: 'type', options: list.types, value: metadata.type })
+            SelectOne({
+              options: list.types,
+              property: 'type',
+              selected: metadata.type,
+              setSelected: onChoice,
+              title: 'Type',
+              update: updateProperty,
+            })
+          }
+          { ['Bug', 'Task'].includes(metadata.type) &&
+              <div>
+                conditional Due
+              </div>
           }
         </div>
-        <div>
-          Statuses
+        <div className='bg-slate-100 py-4 px-4 w-72 mb-4'>
           {
-            Select({ key: 'status', options: list.statuses, value: metadata.status })
+            SelectOne({
+              options: list.statuses,
+              property: 'status',
+              selected: metadata.status,
+              setSelected: onChoice,
+              title: 'Status',
+              update: updateProperty,
+            })
           }
         </div>
-        <div>
-          Tags
+        <div className='bg-slate-100 py-4 px-4 w-72 mb-4'>
+          {
+            SelectMulti({
+              options: list.tags,
+              property: 'tags',
+              selected: metadata.tags,
+              setSelected: onChoice,
+              title: 'Tags',
+              update: updateProperty,
+            })
+          }
         </div>
-        <div>
-          Users
-        </div>
-        <div>
-          conditional Due
+        <div className='bg-slate-100 py-4 px-4 w-72 mb-4'>
+          {
+            SelectMulti({
+              options: list.users,
+              property: 'users',
+              selected: metadata.users,
+              setSelected: onChoice,
+              title: 'Users',
+              update: updateProperty,
+            })
+          }
         </div>
       </div>
   );

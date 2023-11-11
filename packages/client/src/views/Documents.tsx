@@ -5,7 +5,6 @@ import DocumentsTable from '../components/documents-table';
 
 const Component = () => {
   const documents = useLoaderData();
-  console.log('documents', documents);
   return (
       <>
         <div>

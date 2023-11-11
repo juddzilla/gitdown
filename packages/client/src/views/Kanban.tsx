@@ -53,11 +53,10 @@ const Component = () => {
   }, [group])
 
   async function chooseGroup({ target }) {
-    console.log(target.value);
     setGroup(target.value);
 
   }
-  console.log('data', data);
+  // console.log('data', data);
   return (
       <>
         <div>

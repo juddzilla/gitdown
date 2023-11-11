@@ -15,8 +15,9 @@ import {
 const Statuses = activesInactiveStatuses;
 
 const groupByMap = {
-  tag: 'document_tags.tag',
-  // users: 'document_users.user_id',
+  status: 'documents.id',
+  tag: 'document_tags.tag, documents.id',
+  user_id: 'document_users.user_id, documents.id',
 };
 
 export default async function(params) {
@@ -129,10 +130,10 @@ export default async function(params) {
 
   console.log('whereBlock', whereBlock);
 
-  let groupBy = ['GROUP BY', 'documents.id'];
+  let groupBy = groupByMap.status;
 
   if (Object.hasOwn(groupByMap, group)) {
-    groupBy[1] = groupByMap[group];
+    groupBy = groupByMap[group];
   }
 
   const statement = [
@@ -142,7 +143,8 @@ export default async function(params) {
     joinBlock,
     'WHERE',
     whereBlock,
-    // groupBy.join(' '),
+    'GROUP BY',
+    groupBy,
   ].join(' ');
   console.log('KANBAN QUERY STATEMENT', statement);
   const prepared = DB.prepare(statement);

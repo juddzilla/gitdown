@@ -186,6 +186,7 @@ export default class Base {
       priority: 'SELECT distinct priority from documents',
       project: 'SELECT distinct project from documents',
       tag: 'SELECT distinct tag from document_tags',
+      user_id: 'SELECT distinct user_id from document_users',
     };
 
     if (!Object.hasOwn(map, name)) {

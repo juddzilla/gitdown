@@ -10,6 +10,7 @@ const Component = (): ReactElement => {
   const data = useLoaderData();
   const [metadata, setMetadata] = useState(data.metadata);
   const [content, setContent] = useState(data.html);
+  const [canSave, setCanSave] = useState(false)
 
   const save = async () => {
     try {
@@ -23,8 +24,18 @@ const Component = (): ReactElement => {
     }
   };
 
+  function updateMetadata(metadata) {
+    setCanSave(true);
+    setMetadata(metadata);
+  }
+
   function titleChange({ target }) {
-    setMetadata({ ...metadata, title: target.value });
+    updateMetadata({ ...metadata, title: target.value });
+  }
+
+  function updateContent(html) {
+    setCanSave(true);
+    setContent(html);
   }
 
   return (
@@ -44,15 +55,29 @@ const Component = (): ReactElement => {
                       value={metadata.title}
                   />
                 </div>
-                <WYSIWYG content={ content } update={ setContent }/>
+                <WYSIWYG content={ content } update={ updateContent }/>
               </div>
             </div>
 
-            <Metadata
-                metadata={ metadata }
-                save={ save }
-                update={ setMetadata }
-            />
+            <div className='ml-4'>
+              <button
+                  className='
+                  border border-8 border-solid rounded-md uppercase
+                  bg-teal-50 border-teal-300 disabled:shadow-none
+                  disabled:text-stone-300 disabled:bg-slate-50 disabled:border-slate-100 disabled:shadow-none
+                  p-4  mb-4 w-full'
+                  disabled={ !canSave }
+                  onClick={ save }
+              >
+                Save
+              </button>
+
+              <Metadata
+                  metadata={ metadata }
+                  update={ updateMetadata }
+              />
+            </div>
+
           </div>
         </div>
       </>

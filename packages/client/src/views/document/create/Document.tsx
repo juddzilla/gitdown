@@ -40,7 +40,6 @@ display: none;
 
 const Component = (): ReactElement => {
   const data = useLoaderData();
-  console.log('DATA', data);
   const [metadata, setMetadata] = useState({
     title: '',
     project: '',

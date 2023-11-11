@@ -11,12 +11,10 @@ const Component = () => {
   const [list, setList] = useState(initialData)
 
   const submitForm = async (state) => {
-    console.log('state', state);
     try {
       const response = await API.TagCreate(state);
-      console.log('response', response);
       if (Object.hasOwn(response, 'error')) {
-        console.log('successful error', response.error);
+        console.warn('successful error', response.error);
         return;
       }
       list.push(response);

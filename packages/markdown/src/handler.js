@@ -43,14 +43,13 @@ export default class MarkdownHandler {
   async createNewDocument() {
     this.body = '';
     this.metadata = {
-      archived: 0,
-      due: '',
+      archived: false,
+      due: 0,
       priority: '',
       project: '',
       status: '',
       tags: [],
       type: [],
-      updated: '',
       users: [],
     };
     await this.createNewId();
@@ -68,11 +67,14 @@ export default class MarkdownHandler {
       .split('/');
   }
 
-  getMetadata() {
-    return this.metadata;
-  }
+  // getMetadata() {
+  //   return this.metadata;
+  // }
 
-  getData() {
+  async getData() {
+    if (!this.body && !this.metadata) {
+      await this.init();
+    }
     return {
       body: this.body,
       metadata: this.metadata,
@@ -115,5 +117,11 @@ export default class MarkdownHandler {
       filepath: this.filepathParts(),
       updated: Math.round(stats.mtimeMs),
     };
+  }
+
+  async updateFile({ body, metadata }) {
+    this.setMetadata(metadata);
+    this.body = body;
+    await this.saveFile();
   }
 }

@@ -4,14 +4,18 @@ import { Color } from '@tiptap/extension-color';
 import ListItem from '@tiptap/extension-list-item';
 import TextStyle from '@tiptap/extension-text-style';
 import ExtensionLink from '@tiptap/extension-link';
-import { EditorProvider, useCurrentEditor } from '@tiptap/react';
+import {
+  EditorContent,
+  useEditor,
+} from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
 import Icon from './Icon';
 
 import './styles.css';
 
-const MenuBar = () => {
-  const { editor } = useCurrentEditor();
+const MenuBar = (params) => {
+  const { editor } = params;
+  // const { editor } = useCurrentEditor();
 
   // setTimeout(() => {
   //   console.log('JSN');
@@ -56,40 +60,43 @@ const MenuBar = () => {
     }
 
     return (
-        <span className="h-11 w-11 flex items-center justify-center inline-block mr-1">
+        <span
+          className="h-11 w-11 flex items-center justify-center inline-block mr-1"
+          key={ config.key }
+        >
           <button
               className={ classList.join(' ') }
               onClick={ config.onClick }
               disabled={ disabled }
-              key={ config.key }
+
           >
             { Icon(config.icon, ) }
           </button>
         </span>
     );
-  }
+  };
 
-  const buttonCanToggleDisable = ({ icon, property }, index): ReactElement => {
-    const capitalized = property.charAt(0).toUpperCase() + property.slice(1);
-    const methodName = `toggle${capitalized}`;
-
-    const onClick = () => (editor.chain().focus()[methodName]().run());
-
-    const disabled = !editor.can()
-        .chain()
-        .focus()
-        [methodName]()
-        .run();
-
+  const MenuButton = (data, index) => {
+    const { disabled, icon, isActive, method } = data;
+    const onClick = () => editor.chain().focus()[method]().run();
     const classList = [];
+    let toDisable = false;
 
-    if (editor.isActive(property)) {
+    if (Object.hasOwn(data, 'disabled')) {
+      toDisable = !editor.can()
+          .chain()
+          .focus()
+          [disabled]()
+          .run();
+    }
+
+    if (Object.hasOwn(data, 'isActive') && editor.isActive(isActive)) {
       classList.push('is-active', 'border-4');
     }
 
     const config = {
       classList,
-      disabled,
+      disabled: toDisable,
       icon,
       key: index,
       onClick,
@@ -98,7 +105,7 @@ const MenuBar = () => {
     return configureButton(config);
   };
 
-  const createHeadingButton = (level, index) => {
+  const MenuButtonHeading = (level, index) => {
     const onClick = () => editor.chain().focus().toggleHeading({ level }).run();
 
     const classList = [];
@@ -117,89 +124,10 @@ const MenuBar = () => {
     return configureButton(config);
   };
 
-  const createSnakeButton = ({ icon, property }, index) => {
-    const lowercased = property.charAt(0).toLowerCase() + property.slice(1);
-    const methodName = `toggle${property}`;
-
-    const onClick = () => editor.chain().focus()[methodName]().run();
-
-    const classList = [];
-
-    if (editor.isActive(lowercased)) {
-      classList.push('is-active', 'border-4');
-    }
-
-    const config = {
-      classList,
-      icon,
-      key: index,
-      onClick,
-    } as ButtonConfig;
-
-    return configureButton(config);
-  };
-
-  const createSetSnakeCase = ({ icon, property }, index) => {
-    const methodName = `set${property}`;
-
-    const onClick = () => editor.chain().focus()[methodName]().run();
-
-    const config = {
-      icon,
-      key: index,
-      onClick,
-    } as ButtonConfig;
-
-    return configureButton(config);
-  };
-
-  const createSetSnakeCaseCanDisable = ({ icon, property }, index) => {
-    const capitalized = property.charAt(0).toUpperCase() + property.slice(1);
-    const methodName = `set${capitalized}`;
-
-    const onClick = () => editor.chain().focus()[methodName]().run();
-
-    const classList = [];
-
-    if (editor.isActive(property)) {
-      classList.push('is-active', 'border-4');
-    }
-
-    const config = {
-      classList,
-      icon,
-      key: index,
-      onClick,
-    } as ButtonConfig;
-
-    return configureButton(config);
-  };
-
-  const createActionButton = ({ icon, property }, index) => {
-    const onClick = () => editor.chain().focus()[property]().run();
-    const disabled = !editor.can()
-        .chain()
-        .focus()
-        [property]()
-        .run();
-
-    const config = {
-      disabled,
-      icon,
-      key: index,
-      onClick,
-    } as ButtonConfig;
-
-    return configureButton(config);
-  };
-
-  const canToggle = [
-    { property: 'bold', icon: 'BO' },
-    { property: 'italic', icon: 'IT' },
-    { property: 'strike', icon: 'ST' },
-    { property: 'code', icon: 'CD' },
-  ].map(buttonCanToggleDisable);
-
+  const actions = [
+    { disabled: 'undo', method: 'undo', icon: 'UN' },
+    { disabled: 'redo', method: 'redo', icon: 'RD' },
+  ].map(MenuButton);
   const clearing = [{ property: 'unsetAllMarks', icon: 'FC' }].map((data, index) => {
     const onClick = () => {
       editor.chain().focus().clearNodes().unsetAllMarks().run();
@@ -212,80 +140,72 @@ const MenuBar = () => {
 
     return configureButton(config);
   });
+  const codes = [
+    { disabled: 'toggleCode', icon: 'CD', isActive: 'code', method: 'toggleCode'},
+    { icon: 'CB', isActive: 'codeBlock', method: 'toggleCodeBlock' },
+  ].map(MenuButton);
+  const headings = [2,3,4].map(MenuButtonHeading);
+  const link = [{ property: 'link', icon: 'LI'}].map((data, index) => {
+    const onClick = () => {
+      const { from, to, empty } = editor.state.selection;
 
-  const link = [{ property: 'link', icon: 'LI'}]
-      .map((data, index) => {
-        const onClick = () => {
-          const { from, to, empty } = editor.state.selection;
+      if (empty) {
+        return null;
+      }
 
-          if (empty) {
-            return null;
-          }
+      const selection = editor.state.doc.textBetween(from, to, ' ');
+      editor.commands.toggleLink({ href: selection })
+    };
 
-          const selection = editor.state.doc.textBetween(from, to, ' ');
-          editor.commands.toggleLink({ href: selection })
-        };
+    const config = {
+      icon: data.icon,
+      key: index,
+      onClick,
+    } as ButtonConfig;
 
-        const config = {
-          icon: data.icon,
-          key: index,
-          onClick,
-        } as ButtonConfig;
-
-        return configureButton(config);
-      });
-
-  const paragraph = [{ property: 'paragraph', icon: 'PP' }].map(createSetSnakeCaseCanDisable);
-
-  const headings = [2,3,4].map(createHeadingButton);
-
-  const lists = [
-    { property: 'BulletList', icon: 'BL' },
-    { property: 'OrderedList', icon: 'OL' },
-    { property: 'CodeBlock', icon: 'CB' },
-    { property: 'Blockquote', icon: 'BQ' },
-  ].map(createSnakeButton);
-
-  const breaks = [
-    { property: 'HardBreak', icon: 'HB' },
-  ].map(createSetSnakeCase);
-
-  const actions = [
-    { property: 'undo', icon: 'UN' },
-    { property: 'redo', icon: 'RD' },
-  ].map(createActionButton);
+    return configureButton(config);
+  });
+  const paragraph = [].map(MenuButton);
+  const textFormat = [
+    { icon: 'PP', isActive: 'paragraph', method: 'setParagraph'},
+    { icon: 'BL', isActive: 'bulletList', method: 'toggleBulletList' },
+    { icon: 'OL', isActive: 'orderedList', method: 'toggleOrderedList' },
+    { icon: 'BQ', isActive: 'blockquote', method: 'toggleBlockquote' },
+    { icon: 'HB', method: 'setHardBreak' },
+  ].map(MenuButton);
+  const textStyle = [
+    { disabled: 'toggleBold', icon: 'BO', isActive: 'bold', method: 'toggleBold', property: 'bold' },
+    { disabled: 'toggleItalic', icon: 'IT', isActive: 'italic', method: 'toggleItalic', property: 'italic' },
+    { disabled: 'toggleStrike', icon: 'ST', isActive: 'strike', method: 'toggleStrike', property: 'strike' },
+  ].map(MenuButton);
 
   return (
       <>
         <div className="h-11 mb-1 flex items-center">
-          <span className=" flex">
-            { canToggle  }
+          <div className="flex mr-4">
+            { textStyle }
             { link }
-          </span>
-
-          <span className="flex">
             { headings }
-          </span>
-          <span className="flex">
             { paragraph }
-            { lists }
+          </div>
 
-          </span>
+          <div className="flex mr-4">
+            { textFormat }
+          </div>
 
-
+          { clearing }
         </div>
 
         <div className="h-11 mb-1 flex items-center">
-          <span className="flex">
-            { breaks }
-            { clearing }
-          </span>
+          <div className="flex mr-4">
+            { codes }
+          </div>
 
           { actions }
         </div>
       </>
-  )
-}
+  );
+};
 
 const extensions = [
   Color.configure({ types: [TextStyle.name, ListItem.name] }),
@@ -303,43 +223,20 @@ const extensions = [
   ExtensionLink.configure()
 ]
 
-const content = `
-<h2>
-  Hi there,
-</h2>
-<p>
-  this is a <em>basic</em> example of <strong>tiptap</strong>. Sure, there are all kind of basic text styles you’d probably expect from a text editor. But wait until you see the lists:
-</p>
-<ul>
-  <li>
-    That’s a bullet list with one …
-  </li>
-  <li>
-    … or two list items.
-  </li>
-</ul>
-<p>
-  Isn’t that great? And all of that is editable. But wait, there’s more. Let’s try a code block:
-</p>
-<pre><code class="language-css">body {
-display: none;
-}</code></pre>
-<p>
-  I know, I know, this is impressive. It’s only the tip of the iceberg though. Give it a try and click a little bit around. Don’t forget to check the other examples too.
-</p>
-<blockquote>
-  Wow, that’s amazing. Good work, boy! 👏
-  <br />
-  — Mom
-</blockquote>
-`
+export default ({ content, update }) => {
+  const editor = useEditor({
+    editable: true,
+    extensions,
+    content,
+    onUpdate: ({ editor }) => {
+      update(editor.getHTML());
+    },
+  });
 
-export default () => {
   return (
-      <EditorProvider
-          content={content}
-          slotBefore={ <MenuBar /> }
-          extensions={extensions}
-      />
-  )
-}
+      <>
+        <MenuBar editor={ editor }/>
+        <EditorContent editor={editor} />
+      </>
+  );
+};

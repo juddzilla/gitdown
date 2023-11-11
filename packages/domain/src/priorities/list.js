@@ -1,3 +1,3 @@
-import DB from '../interfaces/database';
+import Database from '../interfaces/database';
 
-export default DB.Models.Priorities.List();
+export default Database.Models.Priorities.List();

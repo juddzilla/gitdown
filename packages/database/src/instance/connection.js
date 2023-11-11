@@ -18,6 +18,9 @@ export const create = async () => {
 
   if (!fs.existsSync(dbDirectory)){
     fs.mkdirSync(dbDirectory, { recursive: true });
+  }
+
+  if (!fs.existsSync(dbPath)){
     fs.createWriteStream(dbPath);
   }
 

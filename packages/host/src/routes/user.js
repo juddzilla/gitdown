@@ -1,8 +1,6 @@
-import GitUser from '../services/git-user.js';
+import Domain from '../interfaces/domain';
 
-function handler() {
-  return GitUser();
-}
+const handler = () => Domain.Git.User();
 
 export const route = {
   handler,

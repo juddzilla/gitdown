@@ -63,7 +63,7 @@ const Component = () => {
   return (
       <>
         <div>
-          <h1>{ data.project }</h1>
+          <h1>{ data.tag }</h1>
         </div>
         <div className="p-8">
           <table>

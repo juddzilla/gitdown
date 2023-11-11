@@ -1,7 +1,4 @@
-import Utils from '../interfaces/utils';
-
 import Instance from "../instance/connection.js";
-import moment from "moment";
 
 import {
   arrayValueStatement,
@@ -9,105 +6,37 @@ import {
   truthyValue,
 } from '../utils.js';
 
-export const inactiveStatuses = [
-  'Approved',
-  'Cancelled',
-  'Closed',
-  'Done',
-  'Rejected',
-];
+import {
+  activesInactiveStatuses,
+  activeStatuses,
+  inactiveStatuses
+} from '../models/Statuses';
 
-export const activeStatuses = [
-  'Draft',
-  'To Do',
-  'Open',
-  'In Progress',
-  'In Review',
-  'Under Review',
-];
+const Statuses = activesInactiveStatuses;
 
-const Statuses = [...activeStatuses, ...inactiveStatuses];
-
-
-const consolidate = (results) => {
-  const many = {
-    tag: 'tags',
-    user_id: 'users',
-  };
-
-  const map = results.reduce((acc, result) => {
-    const id = result.id;
-    if (!acc[id]) {
-      acc[id] = {};
-    }
-    let name = result.filename;
-
-    if (name.indexOf('.md') > -1) {
-      result.filename = name.split('.md')[0];
-    }
-
-    Object.keys(result).forEach(attr => {
-      const value = result[attr];
-
-
-      if (Object.keys(many).includes(attr)) {
-        const key = many[attr];
-
-        if (!acc[id][key]) {
-          acc[id][key] = [];
-        }
-
-        if (!acc[id][key].includes(value)) {
-          acc[id][key].push(value);
-        }
-      } else {
-        acc[id][attr] = value;
-      }
-
-      if (!acc[id].updatedAt) {
-        acc[id].updatedAt = moment(result.updated).format('MM/DD/YY');
-      }
-    });
-
-    return acc;
-  }, {});
-
-  return Object.keys(map).map(id => (map[id]));
+const groupByMap = {
+  tag: 'document_tags.tag',
+  // users: 'document_users.user_id',
 };
 
-export default function(params) {
-  const DB = Instance();
+export default async function(params) {
+  // status: active, inactive
+  // priority
+  // project
+  // type
+  // Tags
+  // users
+
+  // group by
+  // filter
+  console.log('params', params);
+  const DB = await Instance();
   const {
+    group,
+    query,
     matchAll,
     ...rest
   } = params;
-
-  Object.keys(rest).forEach(key => {
-    const toArray = [
-      'priority',
-      'project',
-      'status',
-      'tag',
-      'type',
-      'users',
-    ];
-
-    if (toArray.includes(key)) {
-      rest[key] = Utils.StringToArray(rest[key]);
-    }
-  });
-
-  const {
-    name,
-    priority,
-    project,
-    status,
-    tag,
-    type,
-    users,
-  } = rest;
-
-  console.log('rest', rest);
 
   const separator = matchAll && matchAll === 'true' ? 'AND' : 'OR';
 
@@ -124,6 +53,7 @@ export default function(params) {
     'documents.priority',
     'documents.project',
     'documents.status',
+    'documents.title',
     'documents.type',
     'documents.updated',
     'document_tags.tag',
@@ -132,57 +62,79 @@ export default function(params) {
 
   const where = [];
 
-  if (!Object.keys(rest).length) {
+  if (!query || !Object.keys(query).length) {
     where.push(arrayValueStatement('documents', { status: activeStatuses }));
-  }
+  } else {
+    const {
+      name,
+      priority,
+      project,
+      status,
+      tag,
+      type,
+      users,
+    } = query;
 
-  if (truthyValue(status)) {
-    let statuses;
+    console.log('where', where);
 
-    if (status === 'all_active') {
-      statuses = activeStatuses
-    } else if (status === 'all_inactive') {
-      statuses = inactiveStatuses;
-    } else if (status === 'all') {
-      statuses = Statuses;
-    } else {
-      statuses = status;
+    if (truthyValue(status)) {
+      let statuses;
+
+      if (status === 'all_active') {
+        statuses = activeStatuses
+      } else if (status === 'all_inactive') {
+        statuses = inactiveStatuses;
+      } else if (status === 'all') {
+        statuses = Statuses;
+      } else {
+        statuses = status;
+      }
+
+      where.push(arrayValueStatement('documents', { status: statuses }));
     }
 
-    where.push(arrayValueStatement('documents', { status: statuses }));
+    if (truthyValue(project)) {
+      const projects = keyEqualsOrIn({ ['documents.project']: project }).filter((item) => item);
+      where.push(projects);
+    }
+
+    if (truthyValue(priority)) {
+      const priorities = keyEqualsOrIn({ ['documents.priority']: priority }).filter((item) => item);
+      where.push(priorities);
+    }
+
+    if (truthyValue(type)) {
+      const types = keyEqualsOrIn({ ['documents.type']: type }).filter((item) => item);
+      where.push(types);
+    }
+
+    if (truthyValue(name)) {
+      where.push(`document_paths.filename LIKE '%${name}%' OR documents.id LIKE '%${name}%'`);
+    }
+
+    if (truthyValue(tag)) {
+      where.push(arrayValueStatement('document_tags', { tag }));
+    }
+
+    if (truthyValue(users)) {
+      const splitUsersWhereBlock = arrayValueStatement('document_users', { user_id: users });
+      where.push(splitUsersWhereBlock);
+    }
   }
 
-  if (truthyValue(project)) {
-    const projects = keyEqualsOrIn({ ['documents.project']: project }).filter((item) => item);
-    where.push(projects);
-  }
-
-  if (truthyValue(priority)) {
-    const priorities = keyEqualsOrIn({ ['documents.priority']: priority }).filter((item) => item);
-    where.push(priorities);
-  }
-
-  if (truthyValue(type)) {
-    const types = keyEqualsOrIn({ ['documents.type']: type }).filter((item) => item);
-    where.push(types);
-  }
-
-  if (truthyValue(name)) {
-    where.push(`document_paths.filename LIKE '%${name}%' OR documents.id LIKE '%${name}%'`);
-  }
-
-  if (truthyValue(tag)) {
-    where.push(arrayValueStatement('document_tags', { tag }));
-  }
-
-  if (truthyValue(users)) {
-    const splitUsersWhereBlock = arrayValueStatement('document_users', { user_id: users });
-    where.push(splitUsersWhereBlock);
-  }
 
   const joinBlock = joins.join(' ');
   const returnBlock = returnColumns.join(', ');
   const whereBlock = where.join(` ${separator} `);
+
+  console.log('whereBlock', whereBlock);
+
+  let groupBy = ['GROUP BY', 'documents.id'];
+
+  if (Object.hasOwn(groupByMap, group)) {
+    groupBy[1] = groupByMap[group];
+  }
+
   const statement = [
     'SELECT',
     returnBlock,
@@ -190,10 +142,14 @@ export default function(params) {
     joinBlock,
     'WHERE',
     whereBlock,
+    // groupBy.join(' '),
   ].join(' ');
   console.log('KANBAN QUERY STATEMENT', statement);
   const prepared = DB.prepare(statement);
   const results = prepared.all();
-  console.log('KANBAN QUERY RESLTS', consolidate(results));
-  return consolidate(results);
+  console.log('results', results);
+  // console.log('KANBAN QUERY RESLTS', consolidate(results));
+  // return consolidate(results);
+  // return setGroup(group, results);
+  return results;
 }

@@ -13,11 +13,11 @@ export default class DocumentPaths extends Base {
     super(props);
   }
 
-  Create(documentId, { filepath }) {
+  Create({ document_id }, { filepath }) {
     const pathNoCWD = Utils.RelativePath(filepath);
     const parsed = path.parse(pathNoCWD);
     const { base, dir } = parsed;
-    return super.Create({ document_id: documentId, filename: base, path: dir });
+    return super.Create({ document_id: document_id, filename: base, path: dir });
   }
 
   FindAndRemove(filepath) {

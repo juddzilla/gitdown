@@ -20,7 +20,6 @@ export const find = (tableName, condition) => {
 };
 
 export const getMany = (tableName, condition) => {
-  console.log('tableName', tableName);
   const preparedStatement = `SELECT rowid, * FROM ${tableName} WHERE`;
   const query = keyEqualsOrIn(condition).join(' AND ');
 

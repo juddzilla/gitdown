@@ -1,14 +1,21 @@
 import Routes from './routes';
+import PreHandlers from './preHandlers';
 
 export default async function(app) {
   try {
     const routes = await Routes();
-    console.log('routes', routes);
-    await routes.forEach((route) => {
-      if (route) {
-        const { method, handler, path } = route;
+    await routes.forEach((config) => {
+      if (config) {
 
-        app[method](path, handler);
+        // const { method, handler, path } = config;
+        const preHandler = PreHandlers[config.method.toUpperCase()];
+
+        // const route = {
+        //   ...config,
+        //   handler,
+        //   preHandler,
+        // };
+        app.route({ ...config, preHandler });
       }
     });
   } catch (err) {

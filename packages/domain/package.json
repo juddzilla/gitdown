@@ -5,6 +5,10 @@
   "type": "module",
   "version": "1.0.0",
   "dependencies": {
-    "gitdown-database": "1.0.0"
+    "gitdown-database": "1.0.0",
+    "gitdown-markdown": "1.0.0",
+    "gitdown-utils": "1.0.0",
+    "node-html-markdown": "^1.3.0",
+    "showdown": "^2.1.0"
   }
 }

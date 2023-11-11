@@ -15,13 +15,5 @@ export default async function({ port, host }) {
     console.log('Server listening on :', host, port || fastify.server.address().port); // eslint-disable-line
   });
 
-  // fastify.listen(port, (err) => {
-  //   console.log('1');
-  //   if (err) {
-  //     fastify.log.error(err);
-  //     process.exit(1);
-  //   }
-  // });
-
   return fastify;
 }

@@ -1,22 +1,61 @@
+import { useState } from 'react';
 import type { ReactElement } from 'react';
-import API from '../interfaces/host';
 import { useLoaderData } from 'react-router-dom';
-import { marked } from 'marked';
 
-import Metadata from './document/metadata';
+import API from '../interfaces/host';
+import Metadata from './document/create/metadata';
+import WYSIWYG from '../components/editor';
 
 const Component = (): ReactElement => {
   const data = useLoaderData();
+  const [metadata, setMetadata] = useState(data.metadata);
+  const [content, setContent] = useState(data.html);
+
+  const save = async () => {
+    try {
+      await API.DocumentUpdate({
+        id: metadata.id,
+        html: content,
+        metadata
+      });
+    } catch (err) {
+      console.log('SAVE RR', err);
+    }
+  };
+
+  function titleChange({ target }) {
+    setMetadata({ ...metadata, title: target.value });
+  }
+
   return (
-      <div className="flex">
-        <div className="flex flex-1 justify-center bg-slate-50 px-4">
-          <div className="max-w-prose pt-8">
-            <h1 className='border-b-2 border-slate-800 border-solid'>{ data.document.title || 'Untitled' }</h1>
-            <div dangerouslySetInnerHTML={{__html: marked.parse(data.md.body)}}/>
+      <>
+        <div className="">
+          <div className='w-full text-sm uppercase mb-2 mt-1'>Create Document</div>
+
+          <div className='flex'>
+            <div className="bg-slate-50 p-6">
+              <div className="max-w-prose">
+                <div className='mb-6'>
+                  <input
+                      className='outline-none text-4xl p-2 bg-transparent w-full font-extrabold border-b-2 border-slate-800 border-solid'
+                      onChange={ titleChange }
+                      placeholder='Title'
+                      type="text"
+                      value={metadata.title}
+                  />
+                </div>
+                <WYSIWYG content={ content } update={ setContent }/>
+              </div>
+            </div>
+
+            <Metadata
+                metadata={ metadata }
+                save={ save }
+                update={ setMetadata }
+            />
           </div>
         </div>
-        { Metadata(data.document) }
-      </div>
+      </>
   )
 };
 

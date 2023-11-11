@@ -1,7 +1,7 @@
-import Database from '../interfaces/database';
+import Domain from '../interfaces/domain';
 
-const handler = (req, res) => {
-  const results = Database.Queries.Kanban(req.query);
+const handler = async (req, res) => {
+  const results = await Domain.Kanban(req.DATA);
   return res.send({ results });
 }
 

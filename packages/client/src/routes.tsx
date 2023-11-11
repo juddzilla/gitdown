@@ -11,7 +11,6 @@ import Projects from './views/Projects';
 import Tag from './views/Tag';
 import Tags from './views/Tags';
 import User from './views/User';
-import Users from './views/Users';
 
 const routes = {
   element: <App />,
@@ -26,7 +25,6 @@ const routes = {
     Tag,
     Tags,
     User,
-    Users,
   ],
 };
 

@@ -7,33 +7,9 @@
     "method": "get",
     "path": "/user"
   },
-  "UpdateMetadata": {
-    "method": "put",
-    "path": "/metadata/:documentId"
-  },
-  "Tags": {
-    "method": "get",
-    "path": "/tags"
-  },
-  "Tag": {
-    "method": "get",
-    "path": "/tags/:name"
-  },
   "Search": {
     "method": "get",
     "path": "/search"
-  },
-  "Projects": {
-    "method": "get",
-    "path": "/projects"
-  },
-  "Project": {
-    "method": "get",
-    "path": "/project/:name"
-  },
-  "Lists": {
-    "method": "get",
-    "path": "/lists"
   },
   "Kanban": {
     "method": "get",
@@ -43,20 +19,44 @@
     "method": "get",
     "path": "/home"
   },
+  "Tags": {
+    "method": "get",
+    "path": "/tags"
+  },
+  "Tag": {
+    "method": "get",
+    "path": "/tags/:name"
+  },
+  "TagCreate": {
+    "method": "post",
+    "path": "/tags"
+  },
+  "Projects": {
+    "method": "get",
+    "path": "/projects"
+  },
+  "Project": {
+    "method": "get",
+    "path": "/projects/:name"
+  },
+  "ProjectCreate": {
+    "method": "post",
+    "path": "/projects"
+  },
+  "Lists": {
+    "method": "get",
+    "path": "/lists"
+  },
+  "DocumentUpdate": {
+    "method": "put",
+    "path": "/documents/:id"
+  },
   "Documents": {
     "method": "get",
     "path": "/documents"
   },
-  "DocumentByPath": {
-    "method": "get",
-    "path": "/document-path/:documentPath"
-  },
   "DocumentById": {
     "method": "get",
     "path": "/documents/:id"
-  },
-  "Distinct": {
-    "method": "get",
-    "path": "/distinct"
   }
 }

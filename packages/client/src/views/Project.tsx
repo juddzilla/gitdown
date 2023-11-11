@@ -60,6 +60,7 @@ const columns = [
 
 const Component = () => {
   const data = useLoaderData();
+  console.log('data', data);
   return (
       <>
         <div>

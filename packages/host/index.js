@@ -11,5 +11,5 @@ import { init as Websocket } from './src/services/websocket';
   const filesPath = path.resolve('../../', directory, files);
   Server({ port: ports.host, host: serverAddress });
   Watch({ files: filesPath, port: ports.websocket });
-  Websocket({ port: ports.websocket });
+  // Websocket({ port: ports.websocket });
 }())

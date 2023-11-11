@@ -2,22 +2,31 @@ import { useEffect, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import Icons from './Icons';
 
+import API from '../interfaces/host';
+
 const links = [
   { display: 'GitDown', icon: 'logo', path: '/' },
   { display: 'Kanban', icon: 'kanban', path: '/kanban' },
   { display: 'Documents', icon: 'document', path: '/documents' },
   { display: 'Projects', icon: 'folder', path: '/projects' },
   { display: 'Tags', icon: 'tag', path: '/tags' },
-  { display: 'Users', icon: 'users', path: '/users' },
 ];
 
 export default () => {
   const location = useLocation();
   const [current, setCurrent] = useState(location.pathname);
+  const [user, setUser] = useState('');
 
   useEffect(() => {
     setCurrent(location.pathname);
   }, [location]);
+
+  useEffect(() => {
+    API.User().then(res => {
+      setUser(res.name);
+    });
+  }, []);
+
 
   return (
       <nav className="w-72 pl-6 pr-6 pb-6 bg-slate-500 flex flex-col justify-between h-screen">
@@ -46,7 +55,7 @@ export default () => {
               </div>
             ); }) }
         </div>
-        <div>User</div>
+        <div>{ user }</div>
       </nav>
   )
 };

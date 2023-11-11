@@ -1,21 +1,9 @@
 import path from 'path';
-
-// import config from '../../../config.js';
-import Database from '../../interfaces/database';
-console.log('ready inst', Database);
-const { Queries } = Database;
-import Markdown from '../../interfaces/markdown';
+import Domain from '../../interfaces/domain';
 
 export default async function({ files }) {
   const fileName = '*.md';
 
-  const directoryStart = path.join(files, '**', fileName);
-  const filepaths = await Markdown.Files(directoryStart);
-  console.log('filepaths', filepaths);
-  filepaths.forEach((async (filepath) => {
-    const markdown = await new Markdown.Handler(filepath)
-    await markdown.init();
-    const data = markdown.getMetadata();
-    Queries.Populate({ ...data, filepath });
-  }));
+  const directoryStart = path.join(files, '**/', fileName);
+  await Domain.Files.All(directoryStart);
 }

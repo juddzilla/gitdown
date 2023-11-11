@@ -26,6 +26,16 @@ export const keyEqualsStringArrayAnd = (data) => Object.keys(data)
     })
     .join(' AND ');
 
+export const keyEqualsStringArrayLike = (data) => Object.keys(data)
+    .map((key) => {
+      const value = data[key];
+      const val = Number.isInteger(value) ? value : `'%${value}%'`;
+      if (truthyValue(value)) {
+        return `${key} LIKE ${val}`;
+      }
+    })
+    .join(' AND ');
+
 export const keyInStringArray = (data) => Object.keys(data)
   .map((key) => {
     const values = data[key].map((value) => {

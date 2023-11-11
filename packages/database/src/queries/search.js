@@ -48,8 +48,8 @@ const consolidate = (results) => {
   return Object.keys(map).map(id => (map[id]));
 };
 
-export default function (params) {
-  const DB = Instance();
+export default async function (params) {
+  const DB = await Instance();
   const {
     matchAll,
     name,

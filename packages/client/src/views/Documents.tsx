@@ -1,9 +1,11 @@
 import API from '../interfaces/host';
 import { Link, useLoaderData } from 'react-router-dom';
 
+import DocumentsTable from '../components/documents-table';
+
 const Component = () => {
   const documents = useLoaderData();
-
+  console.log('documents', documents);
   return (
       <>
         <div>
@@ -13,13 +15,14 @@ const Component = () => {
           <Link to='/create/document'>Create</Link>
         </div>
         <div>
-          { documents.map((document, index) => (
-              <div key={index}>
-                <Link to={`${document.id}`}>
-                  { document.title || 'Untitled'}
-                </Link>
-              </div>
-          ))}
+          {/*{ documents.map((document, index) => (*/}
+          {/*    <div key={index}>*/}
+          {/*      <Link to={`${document.id}`}>*/}
+          {/*        { document.title || 'Untitled'}*/}
+          {/*      </Link>*/}
+          {/*    </div>*/}
+          {/*))}*/}
+          { DocumentsTable(documents) }
         </div>
       </>
   )

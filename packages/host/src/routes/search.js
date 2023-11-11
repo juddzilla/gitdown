@@ -1,19 +1,11 @@
-import Database from '../interfaces/database';
+import Domain from '../interfaces/domain';
 
 const handler = (req, res) => {
-  const { query } = req;
-
-  if (Object.keys(query).length === 0) {
+if (Object.keys(req.DATA).length === 0) {
     res.status(204).send({});
   }
 
-  const params = Object.keys(query).reduce((acc, key) => {
-    const value = query[key];
-    acc[key] = value.includes(',') ? value.split(',') : value;
-    return acc;
-  }, {});
-
-  const search = Database.Queries.Search(params);
+  const search = Domain.Search(req.DATA);
   res.send({ search });
 };
 

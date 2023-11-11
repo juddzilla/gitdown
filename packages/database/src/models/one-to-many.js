@@ -10,7 +10,6 @@ export default class OneToMany extends Base {
   }
 
   Create(one, many) {
-    console.log('one, many', one, many);
     const preparedStatement = insertInto(this.name);
     const keys = Object.keys({ ...one, ...many }).join(',');
     const keysStatement = `(${keys})`;
@@ -27,7 +26,6 @@ export default class OneToMany extends Base {
       const valueStatement = `(${valueBlock})`;
 
       const statement = [...statementParts, 'VALUES', valueStatement].join(' ');
-      console.log('this.db', this.db, statement);
       const prepared = this.db.prepare(statement);
       const response = { [manyKey]: value };
 
@@ -93,19 +91,21 @@ export default class OneToMany extends Base {
     return response;
   }
 
-  Update(documentId, data) {
+  async Update(documentId, data) {
+    const columns = await this.tableSchemaColumns();
+    const key = columns.filter(c => c !== 'document_id')[0];
     const existing = this.List(documentId);
-    const compared = Utils.CompareArray(data, existing.values.map((i) => i.name));
+    const compared = Utils.CompareArray(data, existing.values.map((i) => i[key]));
     const { aNotB, bNotA } = compared;
 
     if (aNotB.length) {
-      this.Create(documentId, aNotB);
+      this.Create(documentId, { [key]: aNotB });
     }
 
     if (bNotA.length) {
-      this.Remove({ document_id: documentId, ...bNotA });
+      this.Remove({ ...documentId, [key]: bNotA });
     }
 
-    return existing;
+    return data;
   }
 }

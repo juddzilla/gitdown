@@ -3,13 +3,29 @@ import { Link, useLoaderData } from 'react-router-dom';
 
 import API from '../interfaces/host';
 
-const submitForm = (state) => {
-  console.log('state', state);
-};
+const initialState = { name: '' };
 
 const Component = () => {
-  const [state, setState] = useState({ name: '' });
-  const projects = useLoaderData();
+  const initialData = useLoaderData();
+  const [state, setState] = useState(initialState);
+  const [list, setList] = useState(initialData)
+
+  const submitForm = async (state) => {
+    try {
+      const response = await API.ProjectCreate(state);
+      if (Object.hasOwn(response, 'error')) {
+        console.log('successful error', response.error);
+        return;
+      }
+      list.push(response);
+      setList([...list]);
+      setState(initialState);
+
+    } catch (err) {
+      console.warn('ERR', err);
+    }
+  };
+
 
   function onChange(e) {
     setState({ name: e.target.value });
@@ -28,10 +44,10 @@ const Component = () => {
           <button onClick={submitForm.bind(null, state)}>Submit</button>
         </div>
         <div>
-          { projects.map((project, index) => (
+          { list.map((item, index) => (
             <div key={index}>
-              <Link to={`/projects/${project}`}>
-                { project }
+              <Link to={`/projects/${item.name}`}>
+                { item.name }
               </Link>
             </div>
           ))}

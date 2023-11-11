@@ -1,22 +1,15 @@
-import Database from '../interfaces/database';
-
-import GitUser from '../services/git-user.js';
+import Domain from '../interfaces/domain';
 
 function handler(req, res) {
-  let { query } = req;
+  let { DATA } = req;
+  const user = Domain.Git.User();
+  const data = {
+    ...DATA,
+    users: user.email,
+    matchAll: true,
+  };
 
-  const user = GitUser();
-
-  query.users = user.email;
-  query.matchAll = 'true';
-  console.log('query', query);
-  const params = Object.keys(query).reduce((acc, key) => {
-    const value = query[key];
-    acc[key] = value.includes(',') ? value.split(',') : value;
-    return acc;
-  }, {});
-
-  const search = Database.Queries.Search(params);
+  const search = Domain.Search(data);
   res.send({ search });
 }
 

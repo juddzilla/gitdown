@@ -72,7 +72,6 @@ export const find = (tableName, condition) => {
 };
 
 export const getMany = (tableName, condition) => {
-  console.log('gm', tableName, condition);
   const DB = Instance();
   const preparedStatement = `SELECT rowid, * FROM ${tableName}`;
   const parts = [preparedStatement];

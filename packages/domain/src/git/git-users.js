@@ -3,11 +3,11 @@ import { execSync } from 'child_process';
 export default function logInfo() {
   const logs = execSync("git shortlog -sne --all", (error, stdout, stderr) => {
     if (error) {
-      console.log(`error: ${error.message}`);
+      console.warn(`error: ${error.message}`);
       return;
     }
     if (stderr) {
-      console.log(`stderr: ${stderr}`);
+      console.warn(`stderr: ${stderr}`);
       return;
     }
     return stdout;

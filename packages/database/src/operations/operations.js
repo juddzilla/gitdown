@@ -75,7 +75,7 @@ export const insert = (tableName, data) => {
       response.removed = false;
     }
   } catch (err) {
-    console.log('error', err);
+    console.warn('error', err);
     response.error = err.code;
   }
 

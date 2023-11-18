@@ -1,7 +1,6 @@
 import { useEffect, useState  } from 'react';
-import { Link, useLoaderData } from 'react-router-dom';
+import { useLoaderData } from 'react-router-dom';
 import API from '../interfaces/host';
-import DocumentsTable from "../components/documents-table";
 import Table from './kanban/table';
 
 const initialGroup = 'priority';
@@ -23,7 +22,7 @@ const groups = [
   },
   {
     display: 'Type',
-        name: 'type',
+    name: 'type',
   },
   {
     display: 'Tags',
@@ -59,9 +58,9 @@ const Component = () => {
   // console.log('data', data);
   return (
       <>
-        <div>
+        <div className='w-fit'>
           <h1>Kanban</h1>
-          <div>
+          <div className=''>
             <select value={group} onChange={ chooseGroup }>
 
               { groups.map((option, index) => (
@@ -71,9 +70,7 @@ const Component = () => {
               ))}
             </select>
           </div>
-          <div>
-            Table
-
+          <div className=''>
             { Table(data.results) }
           </div>
         </div>

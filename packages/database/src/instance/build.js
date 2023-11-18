@@ -1,16 +1,17 @@
-import path from 'path';
+import path, { dirname } from 'path';
 import { readFile } from 'fs/promises';
+import { fileURLToPath } from 'url';
 
 import Utils from '../interfaces/utils.js';
 import RecreateTable from '../operations/recreate-table.js';
 
-const defaultSchemasPath = '../database/src/schemas';
+const __dirname = dirname(fileURLToPath(import.meta.url));
+
 export default async function() {
-  const filesList = path.resolve(defaultSchemasPath, '*.json');
+  const filesList = path.resolve(__dirname, '../schemas', '*.json');
   let filepaths = await Utils.FindFiles(filesList);
   const tablesInfo = await Promise.all(filepaths.map(async (handler) => {
-    const Path = path.resolve(process.cwd(), handler);
-    const tableInfo = JSON.parse(await readFile(new URL(Path, import.meta.url)));
+    const tableInfo = JSON.parse(await readFile(new URL(handler, import.meta.url)));
     return tableInfo;
   }));
 

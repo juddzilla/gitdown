@@ -7,14 +7,7 @@ export default async function(app) {
     await routes.forEach((config) => {
       if (config) {
 
-        // const { method, handler, path } = config;
         const preHandler = PreHandlers[config.method.toUpperCase()];
-
-        // const route = {
-        //   ...config,
-        //   handler,
-        //   preHandler,
-        // };
         app.route({ ...config, preHandler });
       }
     });

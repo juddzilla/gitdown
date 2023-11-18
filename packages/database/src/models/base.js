@@ -12,7 +12,6 @@ export default class Base {
   constructor(props) {
     const { name } = props;
     this.name = name;
-    console.log('BASE', this.name);
     this.initiate();
   }
 
@@ -47,7 +46,7 @@ export default class Base {
     const [err, results] = this.write(statement);
 
     if (err) {
-      console.log('error', err);
+      console.warn('error', err);
       response.error = err.code;
     } else {
       if (results.changes) {
@@ -67,6 +66,8 @@ export default class Base {
     if (err) {
       return err;
     }
+    console.log(100, results.map(result => result[column]).sort());
+    console.log(results[1][column]);
 
     return results.map(result => result[column]).sort();
   }
@@ -76,11 +77,10 @@ export default class Base {
     const query = keyEqualsStringArrayAnd(condition);
 
     const statement = [preparedStatement, query].join(' ');
-
+    console.log('STATEMENT', statement);
     const [err, results] = this.query(statement);
-
     const data = { ...condition };
-
+    console.log('results', results);
     if (err) {
       return err;
     }
@@ -95,7 +95,7 @@ export default class Base {
 
   List() {
     const statement = `SELECT rowid, * FROM ${this.name}`;
-    console.log('statement', statement);
+    // console.log('statement', statement);
     const [err, results] = this.query(statement);
 
     if (err) {
@@ -106,13 +106,14 @@ export default class Base {
   }
 
   query(statement) {
-    const prepared = this.db.prepare(statement);
-
+    console.log('!! QUERY !!', statement)
     try {
+      const prepared = this.db.prepare(statement);
       const executed = prepared.all();
+      // console.log('executed', executed);
       return [null, executed];
     } catch (err) {
-      console.log('err', err);
+      console.warn('err', err);
       return [{ error: err.code }, null];
     }
   }
@@ -124,9 +125,8 @@ export default class Base {
     const preparedStatement = `DELETE FROM ${this.name} WHERE`;
     const query = keyEqualsStringArrayAnd(condition);
 
-    const statement = [preparedStatement, query, 'RETURNING *'].join(' ');
-
-    const [err, results] = this.query(statement);
+    const statement = [preparedStatement, query].join(' ');
+    const [err, results] = this.run(statement);
 
     if (err) {
       return err;
@@ -135,40 +135,59 @@ export default class Base {
     return results.length? results : [];
   }
 
+  run(statement) {
+    try {
+      const prepared = this.db.prepare(statement);
+      const executed = prepared.run();
+      return [null, executed];
+    } catch (err) {
+      console.warn('err', err);
+      return [{ error: err.code }, null];
+    }
+  }
+
   async tableSchemaColumns() {
     const filename = `${this.name}.json`;
     // const schema = await import(`../schemas/${filename}`, { assert: { type: "json" }});
     const schema = require(`../schemas/${filename}`);
 
-    if (Object.hasOwn(schema.default.columns, 'id')) {
-      delete schema.default.columns.id;
+    if (Object.hasOwn(schema.columns, 'id')) {
+      delete schema.columns.id;
     }
 
-    return Object.keys(schema.default.columns);
+    return Object.keys(schema.columns);
   }
 
   async Update(condition, data) {
     const columns = await this.tableSchemaColumns();
     const updateValues = columns.reduce((acc, cur) => {
-      if (data[cur]) {
+      if (Object.hasOwn(data, cur)) {
         acc[cur] = data[cur];
       }
       return acc;
     }, {});
 
+    console.log('updateValues', updateValues);
+
     const preparedStatement = `UPDATE ${this.name} SET`;
     const queryBlocks = [preparedStatement];
     const setBlocks = keyEqualsStringArray(updateValues);
     const conditionBlock = keyEqualsStringArray(condition);
+    console.log('up sb', setBlocks);
     queryBlocks.push(setBlocks, 'WHERE', conditionBlock);
 
     const statement = queryBlocks.join(' ');
+    console.log(`
+      
+      ${statement}
+      
+    `);
     const response = { condition, data };
 
     const [err, results] = this.write(statement);
 
     if (err) {
-      console.log('error', err);
+      console.warn('error', err);
       response.error = err.code;
     } else {
       if (results.changes) {
@@ -229,7 +248,7 @@ export default class Base {
       const executed = prepared.run();
       return [null, executed];
     } catch (err) {
-      console.log('err', err);
+      console.warn('err', err);
       return [{ error: err.code }, null];
     }
   }

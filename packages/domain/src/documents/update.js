@@ -1,22 +1,22 @@
-import path from 'path';
 import Database from '../interfaces/database';
-import Files from '../interfaces/files';
-import Markdown from '../markdown';
+import Markdown from '../interfaces/markdown';
+import Move from '../files/move';
 
 export default async ({ condition, values }) => {
   const { html, metadata } = values;
-
-  // update file
   const body = Markdown.FromHtml(html);
-  const documentPath = Database.Models.DocumentPath.Find({ document_id: condition.id });
-  const filepath = path.join(documentPath.results.path, documentPath.results.filename);
 
-  const FileHandler = new Files.Handler(filepath);
+  console.log('metadat', metadata);
+  console.log('body', body);
+
+  const FilePath = await Database.Models.DocumentPath.FullPath({ document_id: condition.id });
+  const To = await Database.Models.DocumentPath.ToFullPath({ project: metadata.project, title: `${metadata.title}.md` });
+  await Database.Models.DocumentPath.Update({ document_id: condition.id }, To);
+  const FileHandler = new Markdown.Handler(FilePath);
   await FileHandler.updateFile({ body, metadata });
 
-  // update DB
-  await Database.Models.Documents.Update({ id: condition.id }, metadata);
-  await Database.Models.DocumentTags.Update({ document_id: condition.id }, metadata.tags);
-  await Database.Models.DocumentUsers.Update({ document_id: condition.id }, metadata.users);
+  if (FilePath !== To) {
+    await Move(FilePath, To);
+  }
   return true;
 }

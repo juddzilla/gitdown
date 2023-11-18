@@ -10,9 +10,7 @@ const groupMap = {
 };
 
 const setGroup = (group, data) => {
-  console.log('group', group);
   const grouping = groupMap[group]();
-  console.log('GROUING', grouping);
 
   const grouped = data.reduce((acc, cur) => {
     if (!Object.hasOwn(acc, cur[group])) {
@@ -21,8 +19,6 @@ const setGroup = (group, data) => {
     acc[cur[group]].push(cur);
     return acc;
   }, {});
-
-  console.log('grouped', grouped);
 
   if (['priority', 'status', 'type'].includes(group)) {
     return grouping.map(group => {
@@ -43,8 +39,11 @@ const setGroup = (group, data) => {
   }
 };
 
-export default async (params) => {
-  const data = await Database.Queries.Kanban(params);
-
-  return setGroup(params.group, data);
+export default async (group) => {
+  const [err, data] = await Database.Models.Documents.Search(group);
+  if (err) {
+    console.warn('KANBAM err', err);
+    return [];
+  }
+  return setGroup(group.group, data);
 }

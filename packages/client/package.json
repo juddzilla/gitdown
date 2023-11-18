@@ -19,7 +19,7 @@
     "@tiptap/pm": "^2.1.12",
     "@tiptap/react": "^2.1.12",
     "@tiptap/starter-kit": "^2.1.12",
-    "gitdown-config": "1.0.0",
+    "air-datepicker": "^3.4.0",
     "gitdown-host": "1.0.0",
     "marked": "^9.1.5",
     "moment": "^2.29.4",

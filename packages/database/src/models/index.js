@@ -1,5 +1,6 @@
 import Base from './base';
 import OneToMany from './one-to-many';
+import Documents from './documents';
 import DocumentPaths from './document_paths';
 import Priorities from './Priorities.js';
 import Statuses from './Statuses.js';
@@ -7,7 +8,7 @@ import Types from './Types.js';
 
 export default {
   DocumentPath: new DocumentPaths({ name: 'document_paths' }),
-  Documents: new Base({ name: 'documents' }),
+  Documents: new Documents({ name: 'documents' }),
   DocumentTags: new OneToMany({ name: 'document_tags' }),
   DocumentUsers: new OneToMany({ name: 'document_users' }),
   Priorities,

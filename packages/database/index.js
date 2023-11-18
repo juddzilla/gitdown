@@ -4,7 +4,7 @@
 // import Update from './src/queries/update.js';
 
 import Initialize from './src/instance/init';
-import Queries from "./src/queries/index.js";
+// import Queries from "./src/queries/index.js";
 import Models from './src/models/index.js';
 
 export default async () => {
@@ -13,7 +13,7 @@ export default async () => {
     // Lists,
     // Populate,
     Models,
-    Queries,
+    // Queries,
     // Search,
     // Update,
   };

@@ -1,53 +1,23 @@
-import { useState } from 'react';
 import { Link, useLoaderData } from 'react-router-dom';
 
 import API from '../interfaces/host';
 
-const initialState = { name: '' };
-
 const Component = () => {
-  const initialData = useLoaderData();
-  const [state, setState] = useState(initialState);
-  const [list, setList] = useState(initialData)
+  const list = useLoaderData();
 
-  const submitForm = async (state) => {
-    try {
-      const response = await API.ProjectCreate(state);
-      if (Object.hasOwn(response, 'error')) {
-        console.log('successful error', response.error);
-        return;
-      }
-      list.push(response);
-      setList([...list]);
-      setState(initialState);
-
-    } catch (err) {
-      console.warn('ERR', err);
-    }
-  };
-
-
-  function onChange(e) {
-    setState({ name: e.target.value });
-  }
   return (
       <>
         <div>
           <h1>Projects</h1>
         </div>
         <div>
-          <input
-              onChange={ onChange }
-              type="text"
-              value={ state.name }
-          />
-          <button onClick={submitForm.bind(null, state)}>Submit</button>
+          Create New:
         </div>
         <div>
           { list.map((item, index) => (
             <div key={index}>
-              <Link to={`/projects/${item.name}`}>
-                { item.name }
+              <Link to={`/projects/${item}`}>
+                { item }
               </Link>
             </div>
           ))}

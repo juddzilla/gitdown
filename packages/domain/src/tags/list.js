@@ -1,3 +1,3 @@
 import Database from '../interfaces/database';
 
-export default () => Database.Models.Tags.List();
+export default () => Database.Models.DocumentTags.Distinct('tag');

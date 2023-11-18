@@ -5,7 +5,7 @@ const handler = async (req, res) => {
     const updated = await Domain.Documents.Update(req.DATA);
     return res.send({ updated });
   } catch (err) {
-    console.log('UPD err', err);
+    console.warn('UPD err', err);
     return res.send({ updated: false });
   }
 };

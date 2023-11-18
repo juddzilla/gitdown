@@ -12,12 +12,14 @@
   "private": true,
   "devDependencies": {
     "dotenv-cli": "^7.3.0",
+    "nodemon": "^3.0.1",
     "ttab": "^0.8.0",
     "wsrun": "^5.2.4"
   },
   "type": "module",
   "scripts": {
-    "dev": "yarn wsrun -p gitdown-host -p gitdown-client -c ttab yarn run dev",
+    "dev": "yarn run serve:dev",
+    "serve:dev": "nodemon --config .nodemonrc.json --exec node --experimental-modules --experimental-specifier-resolution=node src/run.js",
     "start": "node --experimental-modules --experimental-specifier-resolution=node index.js"
   }
 }

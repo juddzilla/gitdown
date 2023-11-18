@@ -1,16 +1,19 @@
 import Domain from '../interfaces/domain';
 
-function handler(req, res) {
+async function handler(req, res) {
   let { DATA } = req;
   const user = Domain.Git.User();
-  const data = {
-    ...DATA,
-    users: user.email,
+  const params = {
+    query: {
+      ...DATA,
+      type: ['Bug', 'Task'],
+      users: user.email,
+    },
     matchAll: true,
   };
 
-  const search = Domain.Search(data);
-  res.send({ search });
+  const results = await Domain.Search(params);
+  res.send(results);
 }
 
 export const route = {

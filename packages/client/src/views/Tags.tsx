@@ -1,35 +1,9 @@
-import { useState } from 'react';
 import { Link, useLoaderData } from 'react-router-dom';
 
 import API from '../interfaces/host';
 
-const initialState = { name: '' };
-
 const Component = () => {
-  const initialData = useLoaderData();
-  const [state, setState] = useState(initialState);
-  const [list, setList] = useState(initialData)
-
-  const submitForm = async (state) => {
-    try {
-      const response = await API.TagCreate(state);
-      if (Object.hasOwn(response, 'error')) {
-        console.warn('successful error', response.error);
-        return;
-      }
-      list.push(response);
-
-      setList([...list]);
-      setState(initialState);
-
-    } catch (err) {
-      console.warn('ERR', err);
-    }
-  };
-
-  function onChange(e) {
-    setState({ name: e.target.value });
-  }
+  const list = useLoaderData();
 
   return (
       <>
@@ -37,18 +11,10 @@ const Component = () => {
           <h1>Tags</h1>
         </div>
         <div>
-          <input
-              onChange={ onChange }
-              type="text"
-              value={ state.name }
-          />
-          <button onClick={submitForm.bind(null, state)}>Submit</button>
-        </div>
-        <div>
           { list.map((item, index) => (
               <div key={index}>
-                <Link to={`/tags/${item.name}`}>
-                  { item.name }
+                <Link to={`/tags/${item}`}>
+                  { item }
                 </Link>
               </div>
           ))}

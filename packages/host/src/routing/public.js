@@ -17,7 +17,7 @@ export default async function() {
 
   return fs.writeFile(publicPathsDir, JSON.stringify(paths, null, 2), (err) => {
     if (err) {
-      console.log('write paths err', err);
+      console.warn('write paths err', err);
       throw err;
     }
     process.exit();

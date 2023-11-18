@@ -1,4 +1,3 @@
-import { initialize } from 'gitdown-config';
+import Configuration from 'gitdown-config';
 
-export default initialize;
-
+export default Configuration;

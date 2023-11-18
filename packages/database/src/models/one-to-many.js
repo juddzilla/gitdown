@@ -17,9 +17,8 @@ export default class OneToMany extends Base {
 
     const oneKey = Object.keys(one)[0];
     const oneValue = one[oneKey];
-
     const manyKey = Object.keys(many)[0];
-    const manyValues = Object.values(many[manyKey]);
+    const manyValues = many[manyKey] ? Object.values(many[manyKey]) : [];
 
     return manyValues.reduce((acc, value) => {
       const valueBlock = [oneValue, value].map((v) => `'${v}'`).join(',');

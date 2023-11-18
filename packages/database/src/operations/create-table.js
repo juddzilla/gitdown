@@ -17,6 +17,6 @@ export default async ({ columns, name, unique }) => {
   try {
     prepared.run();
   } catch (err) {
-    console.log('Create Table Error', err);
+    console.warn('Create Table Error', err);
   }
 };

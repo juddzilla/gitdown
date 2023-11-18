@@ -8,7 +8,6 @@ fastify.register(cors, { origin: true, credentials: true });
 
 export default async function({ port, host }) {
   await Routing(fastify);
-
   fastify.listen({ port, host }, (err) => {
     if (err) { throw err; }
     console.log('APP SERVER ADDRESS', fastify.server.address()); // eslint-disable-line

@@ -60,10 +60,17 @@ const columns = [
 
 const Component = () => {
   const data = useLoaderData();
+  const { project, types } = data;
   return (
       <>
         <div>
-          <h1>{ data.project }</h1>
+          <h1>{ project.project }</h1>
+        </div>
+        <div>
+          Create New
+          { types.map((type, index) => (
+              <Link to={`/document/create?project=${project.project}&type=${type.replace(' ', '-').toLowerCase()}`} key={index}>[{ type }]</Link>
+          ))}
         </div>
         <div className="p-8">
           <table>
@@ -76,7 +83,7 @@ const Component = () => {
             </thead>
             <tbody>
               {
-                data.results.map((row, index) => {
+                project.results.map((row, index) => {
                   return (
                       <tr key={index} className='h-8'>
                         {

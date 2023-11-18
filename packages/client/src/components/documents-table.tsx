@@ -17,7 +17,7 @@ const plainText = (value):ReactElement => {
 };
 
 const dateField = (date):ReactElement => {
-  if (!date) {
+  if (date === 'null' || !date) {
     return emptyValue();
   }
   return (
@@ -64,23 +64,42 @@ const columns = [
 ];
 
 const defaultSort = {
-  column: 'due',
+  column: 'status',
   direction: 'desc'
 };
 
 export default (tableInfo):ReactElement => {
-  const [data, setData] = useState(tableInfo);
+  const doSort = (sortConfig, rows) => rows.sort((a, b) => {
+    const { column, direction } = sortConfig;
+    const x = a[column].toLowerCase();
+    const y = b[column].toLowerCase();
+
+    const first = direction === 'desc' ? x : y;
+    const second = first === x ? y : x;
+
+    if (first > second) { return 1; }
+    if (first < second) { return -1; }
+    return 0;
+  });
+
+  const [data, setData] = useState(doSort(defaultSort, tableInfo));
   const [sort, setSort] = useState(defaultSort);
 
   function chooseSort(column) {
+    let direction = 'desc';
     if (sort.column === column) {
       direction = sort.direction === 'desc' ? 'asc' : 'desc';
     }
-    setSort({
+
+    const newSort = {
       column,
       direction,
-    });
+    };
+    setSort(newSort);
+    const newData = doSort(newSort, data);
+    setData(newData);
   }
+
   return (
       <div className="p-8">
         <table>
@@ -112,14 +131,13 @@ export default (tableInfo):ReactElement => {
           </thead>
           <tbody>
           {
-            tableInfo.map((row, index) => {
-              console.log('ROW', row);
+            data.map((row, index) => {
               return (
                   <tr key={index} className='h-8'>
                     {
                       columns.map((column, i) => (
-                          <td key={i} className='relative'>
-                            <Link to={`/documents/${row.id}`} className='no-underline absolute top-0 left-0 w-full h-full p-2'>
+                          <td key={i} className=''>
+                            <Link to={`/documents/${row.id}`} className='no-underline  top-0 left-0  h-full p-2'>
                               {column.component(row[column.key])}
                             </Link>
                           </td>

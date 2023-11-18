@@ -25,7 +25,7 @@ const createTable = ({ columns, name, unique }) => {
   try {
     prepared.run();
   } catch (err) {
-    console.log('Create Table Error', err);
+    console.warn('Create Table Error', err);
   }
 };
 
@@ -134,7 +134,7 @@ export const insert = (tableName, data) => {
       response.removed = false;
     }
   } catch (err) {
-    console.log('error', err);
+    console.warn('error', err);
     response.error = err.code;
   }
 

@@ -4,5 +4,6 @@ export default {
     'Epic',
     'Task',
     'Use Case',
-  ])
+  ]),
+  Template: (type) => { return `Template ${type}` }
 }

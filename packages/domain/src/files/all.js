@@ -1,5 +1,5 @@
 import Utils from '../interfaces/utils';
-import Markdown from '../interfaces/files';
+import Markdown from '../interfaces/markdown.js';
 
 import Populate from './populate';
 

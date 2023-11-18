@@ -14,6 +14,7 @@ export const keyEqualsStringArray = (data) => Object.keys(data)
       return `${key} = ${val}`;
     }
   })
+  .filter(Boolean)
   .join(',');
 
 export const keyEqualsStringArrayAnd = (data) => Object.keys(data)
@@ -24,6 +25,7 @@ export const keyEqualsStringArrayAnd = (data) => Object.keys(data)
         return `${key} = ${val}`;
       }
     })
+    .filter(Boolean)
     .join(' AND ');
 
 export const keyEqualsStringArrayLike = (data) => Object.keys(data)
@@ -34,6 +36,7 @@ export const keyEqualsStringArrayLike = (data) => Object.keys(data)
         return `${key} LIKE ${val}`;
       }
     })
+    .filter(Boolean)
     .join(' AND ');
 
 export const keyInStringArray = (data) => Object.keys(data)

@@ -1,6 +1,7 @@
 {
   "columns": {
     "archived": "INTEGER",
+    "created": "INTEGER",
     "due": "INTEGER",
     "id": "TEXT UNIQUE",
     "priority": "INTEGER",

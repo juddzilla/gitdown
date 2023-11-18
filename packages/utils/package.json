@@ -5,6 +5,7 @@
   "type": "module",
   "version": "1.0.0",
   "dependencies": {
+    "gitdown-config": "1.0.0",
     "glob": "^10.3.10"
   }
 }

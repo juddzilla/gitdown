@@ -3,7 +3,8 @@ import Domain from '../../interfaces/domain';
 const handler = async (req, res) => {
   const { name } = req.params;
   const project = await Domain.Documents.List({ project: name });
-  return res.send(project);
+  const types = await Domain.Types.List();
+  return res.send({ project, types });
 };
 
 export const route = {

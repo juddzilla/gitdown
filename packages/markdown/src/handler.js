@@ -1,25 +1,18 @@
-import { readFile, writeFile } from 'fs/promises';
+import { writeFile } from 'fs/promises';
 import fs from 'fs';
-import path from 'path';
 import FrontMatter from 'front-matter';
 import { nanoid } from 'nanoid';
 
 import Utils from './interfaces/utils';
+import Util from './util';
+import Database from "gitdown-domain/src/interfaces/database.js";
+import path from "path";
 
-const metadataComment = '<!-- GENERATED WITH GITDOWN; DO NOT CHANGE -->';
+const {
+  cleanBody,
+  createMetadataBlock,
+} = Util;
 
-const cleanBody = (body) => {
-  const commentMatch = new RegExp(metadataComment);
-  return body
-    .replace(commentMatch, '')
-    .trim();
-};
-
-const createMetadataBlock = (stringifiedValues) => {
-  const attributes = '---\n'.concat(stringifiedValues, '---\n');
-  const commentBlock = metadataComment.concat('\n\n');
-  return attributes.concat(commentBlock);
-};
 
 const stringifyMetadata = (attributes) => Object
   .keys(attributes)
@@ -38,6 +31,30 @@ const stringifyMetadata = (attributes) => Object
 export default class MarkdownHandler {
   constructor(filepath) {
     this.filepath = filepath;
+    if (!fs.existsSync(this.filepath)) {
+      this.id = nanoid();
+    }
+  }
+
+  async createFile({ body, metadata }) {
+    // const FilePath = await Database.Models.DocumentPath.ToFullPath({ project: metadata.project, title: `${metadata.title}.md` });
+    // this.filepath
+    const ProjectPath = await Database.Models.DocumentPath.ProjectPath({ project: metadata.project });
+    fs.mkdirSync(path.dirname(ProjectPath), { recursive: true });
+    if (fs.existsSync(this.filepath)) {
+      return { error: `A document name ${metadata.title} that name already exists in ${metadata.project}` };
+    }
+
+    const now = new Date().getTime();
+    this.metadata = {
+      ...metadata,
+      created: now,
+      id: this.id,
+      updated: now,
+    };
+    this.body = cleanBody(body);
+    await this.saveFile();
+    return this.id;
   }
 
   async createNewDocument() {
@@ -49,6 +66,7 @@ export default class MarkdownHandler {
       project: '',
       status: '',
       tags: [],
+      title: '',
       type: [],
       users: [],
     };
@@ -56,20 +74,13 @@ export default class MarkdownHandler {
   }
 
   async createNewId() {
-    this.setMetadata({ ...this.metadata, id: nanoid() });
+    await this.setMetadata({ ...this.metadata, id: nanoid() });
     await this.saveFile();
   }
 
-  filepathParts() {
-    return Utils.RelativePath(this.filepath)
-      .split('.')
-      .shift()
-      .split('/');
+  fileId() {
+    return this.id;
   }
-
-  // getMetadata() {
-  //   return this.metadata;
-  // }
 
   async getData() {
     if (!this.body && !this.metadata) {
@@ -91,10 +102,11 @@ export default class MarkdownHandler {
       }
 
       const md = this.metadata ? this.metadata : attributes;
+
       this.body = cleanBody(body);
-      this.setMetadata(md);
+      await this.setMetadata(md);
     } catch (e) {
-      console.log('INIT', e);
+      console.warn('INIT error', e);
       return false;
     }
 
@@ -105,22 +117,31 @@ export default class MarkdownHandler {
 
     const stringifiedMetadata = stringifyMetadata(rest);
     const metadataBlock = createMetadataBlock(stringifiedMetadata);
+    console.log('!!!!!save!!!!', this.body);
     const content = metadataBlock.concat(this.body);
 
-    await writeFile(this.filepath, content);
+    console.log('SAVE', this.filepath, content);
+
+    try {
+      await writeFile(this.filepath, content);
+    } catch (err) {
+      console.warn('WRITE ERR', err);
+    }
   }
 
-  setMetadata(data) {
+  async setMetadata(data) {
     const stats = fs.statSync(this.filepath);
+    const fileNameData = await Utils.Project_Title(this.filepath);
     this.metadata = {
       ...data,
-      filepath: this.filepathParts(),
+      ...fileNameData,
+      created: Math.round(stats.birthtime),
       updated: Math.round(stats.mtimeMs),
     };
   }
 
   async updateFile({ body, metadata }) {
-    this.setMetadata(metadata);
+    await this.setMetadata(metadata);
     this.body = body;
     await this.saveFile();
   }

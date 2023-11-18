@@ -1,8 +1,11 @@
-import path from 'path';
+import path, { dirname } from 'path';
 import Utils from '../interfaces/utils';
 
-export const paths = path.resolve('src', 'routes', '**', '*.js');
+import { fileURLToPath } from 'url';
 
+const __dirname = dirname(fileURLToPath(import.meta.url));
+
+export const paths = path.join(path.dirname(__dirname), 'routes', '**', '*.js');
 export default async () => {
   const filepaths = await Utils.FindFiles(paths);
   const routes = await Promise.all(filepaths.map(async (handler) => {

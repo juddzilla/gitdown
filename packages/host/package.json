@@ -8,9 +8,7 @@
     "@fastify/cors": "^8.4.1",
     "fastify": "^4.24.3",
     "gitdown-config": "1.0.0",
-    "gitdown-database": "1.0.0",
     "gitdown-domain": "1.0.0",
-    "gitdown-markdown": "1.0.0",
     "gitdown-utils": "1.0.0",
     "node-watch": "^0.7.4",
     "ws": "^8.14.2"
@@ -18,7 +16,7 @@
   "scripts": {
     "build:public-paths": "node --experimental-modules --es-module-specifier-resolution=node ./src/routing/build.js",
     "dev": "yarn run build:public-paths & yarn run run:server & yarn run watch:routes",
-    "run:server": "nodemon --config .nodemonrc.json --exec node --experimental-modules --experimental-specifier-resolution=node index.js",
+    "run:server": "nodemon --config .nodemonrc.json --exec node --experimental-modules --experimental-specifier-resolution=node index.js  -- --config=gitdown.dev-config.js",
     "watch:routes": "nodemon --watch src/routes --exec node --experimental-modules --es-module-specifier-resolution=node ./src/routing/watch.js"
   },
   "devDependencies": {

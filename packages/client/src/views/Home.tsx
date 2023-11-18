@@ -1,4 +1,8 @@
+import { useLoaderData } from 'react-router-dom';
+import API from '../interfaces/host';
+
 const Component = () => {
+  const data = useLoaderData();
   return (
       <>
         <div>
@@ -15,6 +19,7 @@ const Component = () => {
 
 const Route = {
   element: <Component />,
+  loader: () => API.Home(),
   path: "/",
 };
 

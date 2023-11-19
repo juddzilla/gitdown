@@ -11,7 +11,7 @@ export default async (filepath) => {
   const title = filename.replace('.md', '');
 
   return {
-    title,
     project,
+    title,
   };
 }

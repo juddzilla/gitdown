@@ -1,13 +1,14 @@
 import fs from 'fs';
 import Database from '../interfaces/database';
-import Markdown from '../interfaces/markdown.js';
+import Git from '../interfaces/git';
+import Markdown from '../interfaces/markdown';
+
 
 export default async (filepath) => {
   const markdown = new Markdown.Handler(filepath);
   await markdown.init();
   const data = (await markdown.getData()).metadata;
 
-  console.log('data', data);
   const {
     tags,
     users,
@@ -39,6 +40,7 @@ export default async (filepath) => {
   }
 
   try {
+    await Git.updateFile(filepath);
     await Database.Models.DocumentPath.Update({ document_id: id }, filepath);
     await Database.Models.Documents.Update({ id }, rest);
     await Database.Models.DocumentTags.Update({ document_id: id }, tags);

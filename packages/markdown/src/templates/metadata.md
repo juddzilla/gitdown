@@ -4,7 +4,7 @@ users: []
 created:
 due:
 priority: Normal
-status:
+status: Draft
 type:
 ---
 <!-- GENERATED WITH GITDOWN; DO NOT CHANGE -->

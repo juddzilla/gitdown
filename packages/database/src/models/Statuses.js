@@ -23,7 +23,7 @@ export const activeStatuses = [
     ...reviewStatuses,
 ];
 
-export const activesInactiveStatuses = [activeStatuses, inactiveStatuses];
+export const activesInactiveStatuses = [...activeStatuses, ...inactiveStatuses];
 
 export default {
   Active: () => (activeStatuses),

@@ -1,13 +1,11 @@
 import type { ReactElement } from 'react';
 
-import Haading from './metadata/Heading';
 import MetadataSelection from './metadata/container';
 import Calendar from './metadata/calendar';
-import Section from './metadata/Section';
-import Heading from "./metadata/Heading";
 
 export default (params): ReactElement => {
   const { list, metadata, update } = params;
+
 
   function onChoice(selection) {
     update({ ...metadata, ...selection });
@@ -15,12 +13,23 @@ export default (params): ReactElement => {
 
   return (
       <div className="">
-        { ['Bug', 'Task'].includes(metadata.type) &&
-            Calendar({
-              property: 'due',
-              update: onChoice,
-              value: metadata.due,
-            })
+        { ['bug', 'task'].includes(metadata.type.toLowerCase()) &&
+            <>
+              { Calendar({
+                property: 'due',
+                update: onChoice,
+                value: metadata.due,
+              }) }
+
+              { <MetadataSelection
+                  display={ 'Priority' }
+                  options={ list.priorities }
+                  property={ 'priority' }
+                  selected={ metadata.priority }
+                  setSelected={ onChoice }
+                  title={ 'Priority' }
+              /> }
+            </>
         }
 
             <MetadataSelection

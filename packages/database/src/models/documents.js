@@ -70,6 +70,7 @@ export default class Documents extends Base {
 
 
   Search(params) {
+    console.log('search params', params);
     const {
       group,
       query,
@@ -101,7 +102,7 @@ export default class Documents extends Base {
     const where = [];
 
     if (!query || !Object.keys(query).length) {
-      where.push(arrayValueStatement('documents', { status: activeStatuses }));
+      where.push(arrayValueStatement('documents', { status: activesInactiveStatuses }));
     } else {
       const {
         name,

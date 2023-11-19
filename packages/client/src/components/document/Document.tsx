@@ -33,7 +33,7 @@ const Component = ({ onSave }): ReactElement => {
 
   function updateMetadata(metadata) {
     setMetadata(metadata);
-    const canSave = metadata.title && metadata.title.trim().length;
+    const canSave = metadata.title && metadata.title.trim().length && metadata.status && metadata.status.trim().length;
     setCanSave(canSave);
   }
 
@@ -45,8 +45,6 @@ const Component = ({ onSave }): ReactElement => {
     setCanSave(true);
     setContent(html);
   }
-
-  // const title = `${} - ${ metadata.type }`;
 
   return (
       <>

@@ -1,5 +1,5 @@
 ---
-tags: tag3
+tags: [tag3]
 users: null
 archived: null
 created: 1700163305154

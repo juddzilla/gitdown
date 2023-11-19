@@ -22,11 +22,11 @@ class Git {
     this.git = simpleGit(options);
   }
 
-  async updatedFile(filepath) {
+  async Add({ action, filepath }) {
     try {
       await Promise.all([
         this.git.add(filepath),
-        this.git.commit(`Updating ${projectFile(filepath)}`),
+        this.git.commit(`${action} ${projectFile(filepath)}`),
         this.git.push(),
       ]);
       return true;
@@ -34,6 +34,14 @@ class Git {
       console.warn('Git Update File Err ', err);
       return false;
     }
+  }
+
+  async UpdateFile(filepath) {
+    return this.Add({ action: 'Update', filepath });
+  }
+
+  async RemoveFile(filepath) {
+    return this.Add({ action: 'Remove', filepath });
   }
 }
 

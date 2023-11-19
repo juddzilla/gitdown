@@ -1,4 +1,5 @@
 import Database from '../interfaces/database';
+import Git from '../interfaces/git';
 
 const {
   DocumentPath,
@@ -12,6 +13,7 @@ export default async function (filepath) {
 
   try {
     if (documentId) {
+      await Git.RemoveFile(filepath);
       [DocumentTags, DocumentUsers, Documents].forEach((type) => type.Remove(documentId));
       return documentId;
     }

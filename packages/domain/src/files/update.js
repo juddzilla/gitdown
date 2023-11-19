@@ -40,7 +40,7 @@ export default async (filepath) => {
   }
 
   try {
-    await Git.updateFile(filepath);
+    await Git.UpdateFile(filepath);
     await Database.Models.DocumentPath.Update({ document_id: id }, filepath);
     await Database.Models.Documents.Update({ id }, rest);
     await Database.Models.DocumentTags.Update({ document_id: id }, tags);

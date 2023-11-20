@@ -12,7 +12,6 @@ export default async () => {
     const { route } = await import(handler);
 
     if (route) {
-
       return route;
     }
 

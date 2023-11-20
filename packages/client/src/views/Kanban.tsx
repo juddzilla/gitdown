@@ -1,10 +1,10 @@
 import { useEffect, useState  } from 'react';
 import { useLoaderData } from 'react-router-dom';
 import API from '../interfaces/host';
-import Table from './kanban/table';
+// import Table from './kanban/table';
 import Icon from '../components/Icons';
 import Filter from './kanban/filter';
-
+import DndContext from './kanban/dnd/Context';
 const initialGroup = 'priority';
 
 const request = async (params) => await API.Kanban(params);
@@ -45,20 +45,46 @@ const initialFilters = {
   users: [],
 };
 
+const filterMap = {
+  statuses: 'status',
+  priorities: 'priority',
+  projects: 'project',
+  tags: 'tags',
+  types: 'type',
+  users: 'user_id',
+};
+
 const Component = () => {
   const results = useLoaderData();
+
   const [data, setData] = useState(results.data.results);
   const [showFilters, setShowFilters] = useState(false);
   const [filters, setFilters] = useState(initialFilters);
   const [group, setGroup] = useState(initialGroup);
 
-  async function getData(group) {
-    await request({ group }).then(res => setData(res.results));
-    setGroup(group);
+  async function getData({ filters, group }) {
+    const F = {...filters };
+    Object.keys(F).forEach(key => {
+      console.log('key', key);
+      console.log('filters[key]', F[key].length);
+      if (!F[key].length) {
+        delete F[key];
+      }
+    });
+    console.log('F', F);
+    return await request({ group });
   }
 
+  useEffect(() => {
+    getData({ group, filters }).then(res => {
+      console.log('filters', filters);
+      setData(res.results);
+    });
+  }, [group, filters, setData]);
+
   async function chooseGroup({ target }) {
-    await getData(target.value);
+    console.log('target.value', target.value);
+    setGroup(target.value);
   }
 
   function setSelected(key, values) {
@@ -67,6 +93,9 @@ const Component = () => {
 
   function toggleShowFilters() {
     setShowFilters(!showFilters);
+  }
+  function onDrop(d) {
+    console.log('ondrop', d, group);
   }
 
   const filterIcon = Object.values(filters).some(filter => filter.length) ? 'filterActive' : 'filter';
@@ -149,7 +178,7 @@ const Component = () => {
 
         </div>
         <div className=' h-full'>
-          { Table(data) }
+          { DndContext(data, onDrop) }
         </div>
       </div>
   )

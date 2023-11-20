@@ -3,7 +3,6 @@ import Domain from '../../interfaces/domain';
 const handler = async (req, res) => {
   try {
     const document = await Domain.Documents.Create.Submit(req.DATA);
-    console.log('document', document);
     return res.send(document);
   } catch (err) {
     console.warn('Create error', err);

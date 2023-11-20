@@ -1,6 +1,6 @@
-import API from '../../interfaces/host';
+import API from '../interfaces/host';
 
-import Document from '../../components/document/Document';
+import Document from '../components/document/Document';
 
 const onSave = async ({ content, metadata }) => {
   try {

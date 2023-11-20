@@ -1,6 +1,7 @@
 import type { ReactElement } from 'react';
 
-import MetadataSelection from './metadata/container';
+import MultiSelect from './metadata/multi-select';
+import SingleSelect from './metadata/single-select';
 import Calendar from './metadata/calendar';
 
 export default (params): ReactElement => {
@@ -21,7 +22,7 @@ export default (params): ReactElement => {
                 value: metadata.due,
               }) }
 
-              { <MetadataSelection
+              { <SingleSelect
                   display={ 'Priority' }
                   options={ list.priorities }
                   property={ 'priority' }
@@ -32,7 +33,7 @@ export default (params): ReactElement => {
             </>
         }
 
-            <MetadataSelection
+            <SingleSelect
                 display={ 'Status' }
                 options={ list.statuses }
                 property={ 'status' }
@@ -41,10 +42,9 @@ export default (params): ReactElement => {
                 title={ 'Status' }
             />
 
-        {   MetadataSelection({
+        {   MultiSelect({
               allowCreate: true,
               display: 'Tag',
-              multi: true,
               options: list.tags,
               property: 'tags',
               selected: metadata.tags,
@@ -54,9 +54,8 @@ export default (params): ReactElement => {
           }
 
           {
-            MetadataSelection({
+            MultiSelect({
               display: 'User',
-              multi: true,
               options: list.users,
               property: 'users',
               selected: metadata.users,

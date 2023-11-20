@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import SelectOption from './select-option';
 import Icons from '../../Icons';
 import Heading from './Heading';
@@ -8,7 +8,6 @@ export default (props) => {
   const {
     allowCreate,
     display,
-    multi,
     options,
     property,
     selected,
@@ -40,21 +39,15 @@ export default (props) => {
   }
 
   function createSelection(choice) {
-    if (multi) {
-      const choices = [...selected];
-      const index = choices.indexOf(choice);
+    const choices = [...selected];
+    const index = choices.indexOf(choice);
 
-      if (index === -1) {
-        choices.push(choice);
-      } else {
-        setSelected({ [property]: choices });
-        choices.splice(index, 1);
-      }
-      setSelected({ [property]: choices });
+    if (index === -1) {
+      choices.push(choice);
     } else {
-      const selection = choice === selected ? '' : choice;
-      setSelected({ [property]: selection });
+      choices.splice(index, 1);
     }
+    setSelected({ [property]: choices });
   }
 
   function handleSelection(choice) {
@@ -69,7 +62,7 @@ export default (props) => {
   }
 
   const Selected = ({ value }) => (
-      <div className='flex items-center rounded bg-white mr-2 mb-2'>
+      <div className='border border-slate-300 flex items-center rounded bg-white mr-2 mb-2'>
         <span className='p-2 pr-0'>
           { value }
         </span>
@@ -87,18 +80,17 @@ export default (props) => {
 
   return (
       <Section>
+
         { Heading({ active, noToggle: false, title, toggleActive }) }
         { !active ? (
-            <div className='flex flex-wrap'>
+            <div className='flex flex-wrap p-2 pb-0'>
               {  (selected && selected.length) ? (
                   <>
-                    { Array.isArray(selected) ? (
-                        selected.map((selection, index) => (
-                            <span key={index}>
-                              <Selected value={selection} />
-                            </span>))
-                      ) : (
-                        <Selected value={selected} />
+                    {
+                      selected.map((selection, index) => (
+                        <span key={index}>
+                          <Selected value={selection} />
+                        </span>)
                       )
                     }
                   </>
@@ -128,7 +120,7 @@ export default (props) => {
               }
               { (!allowCreate && !!!data.length) &&
                   <div
-                      className='mt-1 p-2 font-bold bg-black text-white'
+                      className='p-2 font-bold bg-black text-white'
                   >
                     No { display }: { search }
                   </div>
@@ -136,9 +128,7 @@ export default (props) => {
               <div className='overflow-scroll max-h-64 w-full'>
                 {
                   data.map((option, index) => {
-                    const isSelected = multi ?
-                      selected.includes(option) :
-                      selected === option;
+                    const isSelected = selected.includes(option);
                     const d = {
                       index,
                       onClick: handleSelection.bind(null, option),

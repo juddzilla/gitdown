@@ -40,7 +40,8 @@ export default async (filepath) => {
   }
 
   try {
-    await Git.UpdateFile(filepath);
+    const gitted = await Git.UpdateFile(filepath);
+    console.log('post add', gitted);
     await Database.Models.DocumentPath.Update({ document_id: id }, filepath);
     await Database.Models.Documents.Update({ id }, rest);
     await Database.Models.DocumentTags.Update({ document_id: id }, tags);

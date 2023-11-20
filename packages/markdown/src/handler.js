@@ -117,10 +117,7 @@ export default class MarkdownHandler {
 
     const stringifiedMetadata = stringifyMetadata(rest);
     const metadataBlock = createMetadataBlock(stringifiedMetadata);
-    console.log('!!!!!save!!!!', this.body);
     const content = metadataBlock.concat(this.body);
-
-    console.log('SAVE', this.filepath, content);
 
     try {
       await writeFile(this.filepath, content);

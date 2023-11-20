@@ -1,10 +1,10 @@
 import { Link } from 'react-router-dom';
 export default (data) => {
   return (
-      <div className='flex'>
+      <div className='flex  h-full'>
         { data.map((group, index) => (
-          <div className='w-72 mr-4 p-2 bg-slate-100' key={index}>
-            <div className='font-bold text-xl mb-4 w-full'>
+          <div className='w-72 mr-4 p-2 bg-slate-50 rounded' key={index}>
+            <div className='font-bold text-xl mb-4 w-full px-1'>
               { group.name || 'none'}
             </div>
 
@@ -19,7 +19,10 @@ export default (data) => {
                           <div className='font-bold'>{ res.title }</div>
                         </div>
                       </div>
-                      <div className='text-right px-2'>{ res.status }</div>
+                      <div className='flex justify-between'>
+                        <div className='w-12 pl-2'>{ res.priority }</div>
+                        <div className='text-right px-2'>{ res.status }</div>
+                      </div>
 
                     </Link>
                   </div>

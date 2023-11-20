@@ -6,9 +6,6 @@ export default async ({ condition, values }) => {
   const { html, metadata } = values;
   const body = Markdown.FromHtml(html);
 
-  console.log('metadat', metadata);
-  console.log('body', body);
-
   const FilePath = await Database.Models.DocumentPath.FullPath({ document_id: condition.id });
   const To = await Database.Models.DocumentPath.ToFullPath({ project: metadata.project, title: `${metadata.title}.md` });
   await Database.Models.DocumentPath.Update({ document_id: condition.id }, To);

@@ -7,12 +7,12 @@ const config = await Configuration.get();
 const options = {
   baseDir: config.root,
   binary: 'git',
-  maxConcurrentProcesses: 6,
+  maxConcurrentProcesses: 1,
   trimmed: false,
 };
 
-const projectFile = (filepath) => {
-  const ProjectTitle = Utils.Project_Title(filepath);
+const projectFile = async (filepath) => {
+  const ProjectTitle = await Utils.Project_Title(filepath);
   const { project, title } = ProjectTitle;
   return `${ project }: ${ title }`;
 };
@@ -23,25 +23,24 @@ class Git {
   }
 
   async Add({ action, filepath }) {
+    const message =  `${action} --> ${ await projectFile(filepath)}`;
     try {
-      await Promise.all([
-        this.git.add(filepath),
-        this.git.commit(`${action} ${projectFile(filepath)}`),
-        this.git.push(),
-      ]);
+      await this.git.add(filepath);
+      await this.git.commit(message);
+      await this.git.push();
       return true;
     } catch (err) {
-      console.warn('Git Update File Err ', err);
+      console.warn('Git Update File Err ', action, err);
       return false;
     }
   }
 
   async UpdateFile(filepath) {
-    return this.Add({ action: 'Update', filepath });
+    return await this.Add({ action: 'Update', filepath });
   }
 
   async RemoveFile(filepath) {
-    return this.Add({ action: 'Remove', filepath });
+    return await this.Add({ action: 'Remove', filepath });
   }
 }
 

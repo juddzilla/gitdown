@@ -8,6 +8,8 @@ export default (data) => {
 
   const classList = [
     'border-l-2',
+    'border-r-2',
+    'border-x-white',
     'cursor-pointer',
     'even:bg-slate-50',
     'flex',
@@ -20,9 +22,9 @@ export default (data) => {
   ];
 
   if (selected) {
-    classList.push('font-bold', 'border-black')
+    classList.push('font-bold', 'border-l-black')
   } else {
-    classList.push('border-transparent');
+    // classList.push('border-transparent');
   }
   return (
       <div
@@ -30,7 +32,7 @@ export default (data) => {
           key={ index }
           onClick={ onClick }
       >
-        { option }
+        { option || '(None)' }
       </div>
   );
 }

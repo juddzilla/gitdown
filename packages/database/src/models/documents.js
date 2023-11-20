@@ -70,7 +70,6 @@ export default class Documents extends Base {
 
 
   Search(params) {
-    console.log('search params', params);
     const {
       group,
       query,

@@ -19,14 +19,11 @@ const templateMap = {
 export default async (type) => {
   const file = path.resolve(__dirname, templateMap[type.toLowerCase()]);
   const defaultMetadata = path.resolve(__dirname, templateMap.metadata);
-  console.log('file', file);
   // const template = await import(file);
   const data = await fs.readFileSync(file);
   const metadataFile = await fs.readFileSync(defaultMetadata);
-  console.log('data', data.toString());
   const content = FrontMatter(data.toString());
   const metadataContent = FrontMatter(metadataFile.toString());
-  console.log('content', content);
   const { body } = content;
   const { attributes } = metadataContent;
 

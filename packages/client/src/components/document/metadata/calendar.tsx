@@ -3,6 +3,7 @@ import localeEn from 'air-datepicker/locale/en';
 
 import airdatepicker from './airdatepicker';
 
+import Section from './Section';
 import Heading from './Heading';
 
 const monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
@@ -31,6 +32,7 @@ export default ({ property, update, value }) => {
   }
 
   const options = {
+    classes: '!border-transparent',
     dateFormat: 'MMMM dd EEEE',
     inline: true,
     locale: localeEn,
@@ -54,6 +56,8 @@ export default ({ property, update, value }) => {
     'font-medium',
     'flex',
     'justify-center',
+    'p-2',
+    'pb-4'
   ];
 
   const calendarClassList = ['ml-1'];
@@ -62,15 +66,13 @@ export default ({ property, update, value }) => {
   hide.push('hidden')
 
   return (
-      <div className='w-64 mb-6 pt-2'>
-        <div className='px-4'>
-          { Heading({
-            active: true,
-            noToggle: true,
-            title: 'Due',
-            toggleActive: null,
-          }) }
-        </div>
+      <Section>
+        { Heading({
+          active: true,
+          noToggle: true,
+          title: 'Due',
+          toggleActive: null,
+        }) }
         <div className={ singleDateClassList.join(' ')} onClick={ toggle }>
           <div
               className="w-32 flex-none rounded-t lg:rounded-t-none lg:rounded-l text-center shadow-lg ">
@@ -96,6 +98,6 @@ export default ({ property, update, value }) => {
         <div className={ calendarClassList.join(' ') }>
           { airdatepicker(options) }
         </div>
-      </div>
+      </Section>
   );
 }

@@ -47,28 +47,30 @@ const Component = ({ onSave }): ReactElement => {
   }
 
   return (
-      <>
-        <div className='w-full text-md'>{ metadata.project }</div>
+      <div className='ml-4'>
         <div className='flex mb-3'>
           <div className='flex items-center  w-full max-w-prose'>
-            <div className={`flex rounded h-12 w-12 mr-2 justify-center items-center text-white bg-${metadata.type.replace(' ', '-').toLowerCase()}-primary  font-bold capitalize`}>
+            <div className={`flex rounded h-14 w-14 mr-2 justify-center items-center text-white bg-${metadata.type.replace(' ', '-').toLowerCase()}-primary font-bold text-xl capitalize`}>
               { metadata.type[0] }
             </div>
-            <input
-                className='border-b-2 border-solid border-slate-800 outline-none text-4xl bg-transparent w-full font-extrabold'
-                onChange={ titleChange }
-                placeholder='Title'
-                type="text"
-                value={metadata.title}
-            />
+            <div className='w-full'>
+              <div className='w-full text-md'>{ metadata.project }</div>
+              <input
+                  className='border-b-2 border-solid border-slate-800 outline-none text-4xl bg-transparent w-full font-extrabold'
+                  onChange={ titleChange }
+                  placeholder='Title'
+                  type="text"
+                  value={metadata.title}
+              />
+            </div>
           </div>
 
-          <div className='w-64 ml-4'>
+          <div className='w-64 ml-8 flex items-center'>
             <button
                 className={`
-                border border-8 border-solid rounded-md uppercase
-                disabled:text-stone-300 disabled:bg-slate-50 disabled:border-slate-100 disabled:shadow-none
-                bg-${metadata.type.replace(' ', '-').toLowerCase()}-secondary border-${metadata.type.replace(' ', '-').toLowerCase()}-primary disabled:shadow-none
+                rounded-md uppercase text-white
+                disabled:text-stone-400 disabled:bg-slate-50 disabled:border-slate-100 disabled:shadow-none
+                bg-${metadata.type.replace(' ', '-').toLowerCase()}-primary border-${metadata.type.replace(' ', '-').toLowerCase()}-secondary disabled:shadow-none
                 h-12 w-full`}
                 disabled={ !canSave }
                 onClick={ save }
@@ -82,7 +84,7 @@ const Component = ({ onSave }): ReactElement => {
             <WYSIWYG content={ content } update={ updateContent }/>
           </div>
 
-          <div className='ml-4'>
+          <div className='ml-8'>
             <Metadata
                 list={ data.list }
                 metadata={ metadata }
@@ -90,7 +92,7 @@ const Component = ({ onSave }): ReactElement => {
             />
           </div>
         </div>
-      </>
+      </div>
   )
 };
 export default Component;

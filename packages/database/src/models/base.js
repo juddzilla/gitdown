@@ -66,8 +66,6 @@ export default class Base {
     if (err) {
       return err;
     }
-    console.log(100, results.map(result => result[column]).sort());
-    console.log(results[1][column]);
 
     return results.map(result => result[column]).sort();
   }
@@ -77,10 +75,10 @@ export default class Base {
     const query = keyEqualsStringArrayAnd(condition);
 
     const statement = [preparedStatement, query].join(' ');
-    console.log('STATEMENT', statement);
+    // console.log('STATEMENT', statement);
     const [err, results] = this.query(statement);
     const data = { ...condition };
-    console.log('results', results);
+    // console.log('results', results);
     if (err) {
       return err;
     }
@@ -106,7 +104,7 @@ export default class Base {
   }
 
   query(statement) {
-    console.log('!! QUERY !!', statement)
+    // console.log('!! QUERY !!', statement)
     try {
       const prepared = this.db.prepare(statement);
       const executed = prepared.all();
@@ -167,21 +165,13 @@ export default class Base {
       return acc;
     }, {});
 
-    console.log('updateValues', updateValues);
-
     const preparedStatement = `UPDATE ${this.name} SET`;
     const queryBlocks = [preparedStatement];
     const setBlocks = keyEqualsStringArray(updateValues);
     const conditionBlock = keyEqualsStringArray(condition);
-    console.log('up sb', setBlocks);
     queryBlocks.push(setBlocks, 'WHERE', conditionBlock);
 
     const statement = queryBlocks.join(' ');
-    console.log(`
-      
-      ${statement}
-      
-    `);
     const response = { condition, data };
 
     const [err, results] = this.write(statement);

@@ -1,5 +1,5 @@
 export default (props) => (
-    <div className='bg-slate-100 pt-2 pb-4 px-4 w-64 mb-6 hover:bg-slate-300'>
+    <div className='hover:shadow-lg text-slate-400 hover:text-slate-900  w-64 mb-6 border rounded border-slate-200 hover:border-white'>
       { props.children }
     </div>
 );

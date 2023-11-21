@@ -104,11 +104,10 @@ export default class Base {
   }
 
   query(statement) {
-    // console.log('!! QUERY !!', statement)
     try {
       const prepared = this.db.prepare(statement);
       const executed = prepared.all();
-      // console.log('executed', executed);
+
       return [null, executed];
     } catch (err) {
       console.warn('err', err);

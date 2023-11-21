@@ -29,19 +29,19 @@ export default class Documents extends Base {
   async Find(id) {
     const DB = await Instance();
     const parts = [`
-    SELECT
-    documents.*,
-    group_concat(DISTINCT document_tags.tag) as tags,
-    group_concat(DISTINCT document_users.user_id) as users
-    FROM documents
-    LEFT JOIN    
-    document_tags
-    ON documents.id = document_tags.document_id
-    LEFT JOIN
-    document_users
-    ON documents.id = document_users.document_id
-    WHERE documents.id = '${id}'
-    GROUP BY documents.id
+      SELECT
+      documents.*,
+      group_concat(DISTINCT document_tags.tag) as tags,
+      group_concat(DISTINCT document_users.user_id) as users
+      FROM documents
+      LEFT JOIN    
+      document_tags
+      ON documents.id = document_tags.document_id
+      LEFT JOIN
+      document_users
+      ON documents.id = document_users.document_id
+      WHERE documents.id = '${id}'
+      GROUP BY documents.id
   `];
 
     const statement = parts.join(' ');
@@ -68,6 +68,32 @@ export default class Documents extends Base {
     }
   }
 
+  query(statement) {
+    const results = super.query(statement);
+    if (results[0] !== null) {
+      return results;
+    }
+    const data = results[1].map(result => {
+      let tags = [];
+      let users = [];
+
+      if (Object.hasOwn(result, 'tags')) {
+        tags = result.tags.split(',');
+      }
+
+      if (Object.hasOwn(result, 'users')) {
+        users = result.users.split(',');
+      }
+
+      return {
+        ...result,
+        tags,
+        users,
+      };
+    });
+    return [null, data];
+  }
+
 
   Search(params) {
     const {
@@ -77,6 +103,22 @@ export default class Documents extends Base {
     } = params;
 
     const separator = matchAll && matchAll === 'true' ? 'AND' : 'OR';
+
+  //   const parts = [`
+  //     SELECT
+  //     documents.*,
+  //     group_concat(DISTINCT document_tags.tag) as tags,
+  //     group_concat(DISTINCT document_users.user_id) as users
+  //     FROM documents
+  //     LEFT JOIN
+  //     document_tags
+  //     ON documents.id = document_tags.document_id
+  //     LEFT JOIN
+  //     document_users
+  //     ON documents.id = document_users.document_id
+  //     WHERE documents.id = '${id}'
+  //     GROUP BY documents.id
+  // `];
 
     const joins = [
       'JOIN document_paths on document_paths.document_id = documents.id',
@@ -94,8 +136,8 @@ export default class Documents extends Base {
       'documents.title',
       'documents.type',
       'documents.updated',
-      'document_tags.tag',
-      'document_users.user_id',
+      'group_concat(DISTINCT document_tags.tag) as tags',
+      'group_concat(DISTINCT document_users.user_id) as users',
     ];
 
     const where = [];

@@ -3,7 +3,7 @@ import { useLoaderData } from 'react-router-dom';
 import API from '../interfaces/host';
 // import Table from './kanban/table';
 import Icon from '../components/Icons';
-import Filter from './kanban/filter';
+import Filters from './kanban/Filters';
 import DndContext from './kanban/dnd/Context';
 const initialGroup = 'priority';
 
@@ -56,31 +56,57 @@ const filterMap = {
 
 const Component = () => {
   const results = useLoaderData();
-
   const [data, setData] = useState(results.data.results);
-  const [showFilters, setShowFilters] = useState(false);
   const [filters, setFilters] = useState(initialFilters);
   const [group, setGroup] = useState(initialGroup);
 
-  async function getData({ filters, group }) {
-    const F = {...filters };
-    Object.keys(F).forEach(key => {
-      console.log('key', key);
-      console.log('filters[key]', F[key].length);
-      if (!F[key].length) {
-        delete F[key];
-      }
-    });
-    console.log('F', F);
-    return await request({ group });
-  }
+  // async function getData() {
+  //   return await request({ group });
+  // }
 
   useEffect(() => {
-    getData({ group, filters }).then(res => {
-      console.log('filters', filters);
+    request({ group }).then(res => {
       setData(res.results);
     });
-  }, [group, filters, setData]);
+  }, [group, setData]);
+
+  useEffect(() => {
+    const filterOn = Object.keys(filters).reduce((acc, key) => {
+      if (filters[key].length) {
+        acc[filterMap[key]] = filters[key];
+      }
+
+      return acc;
+    }, {});
+
+    if (!Object.keys(filterOn).length) {
+      setData(results.data.results);
+      return;
+    }
+
+    const newData = results.data.results.map(data => {
+      const results = data.results.filter(result => {
+        const keys = Object.keys(filterOn);
+        const hasKey = keys.some(key => {
+          if (Array.isArray(result[key])) {
+            return result[key].some(r => filterOn[key].includes(r));
+          } else {
+            return filterOn[key].includes(result[key])
+          }
+        });
+        if (hasKey) {
+          return result;
+        }
+        return false;
+      }).filter(Boolean);
+
+      return {
+        ...data, results
+      };
+    });
+
+    setData(newData);
+  }, [filters]);
 
   async function chooseGroup({ target }) {
     console.log('target.value', target.value);
@@ -91,15 +117,12 @@ const Component = () => {
     setFilters({ ...filters, [key]: values });
   }
 
-  function toggleShowFilters() {
-    setShowFilters(!showFilters);
-  }
   function onDrop(d) {
     console.log('ondrop', d, group);
   }
 
   const filterIcon = Object.values(filters).some(filter => filter.length) ? 'filterActive' : 'filter';
-
+  const groupingOn = Object.keys(filterMap).find(key => filterMap[key] === group);
   return (
       <div className='w-fit h-full'>
         <h1>Kanban</h1>
@@ -114,67 +137,10 @@ const Component = () => {
               ))}
             </select>
           </div>
-          <div className='flex items-center mr-4' onClick={ toggleShowFilters }>
+          <div className='flex items-center mr-4' >
             { Icon(filterIcon, 'stroke-black') }
           </div>
-          { showFilters &&
-            <>
-              {
-                <Filter
-                    options={results.list.statuses}
-                    property='statuses'
-                    selected={filters.statuses}
-                    setSelected={setSelected.bind(null, 'statuses')}
-                    title='Status'
-                />
-              }
-              {
-                <Filter
-                    options={results.list.priorities}
-                    property='priorities'
-                    selected={filters.priorities}
-                    setSelected={setSelected.bind(null, 'priorities')}
-                    title='Priority'
-                />
-              }
-              {
-                <Filter
-                    options={results.list.projects}
-                    property='projects'
-                    selected={filters.projects}
-                    setSelected={setSelected.bind(null, 'projects')}
-                    title='Projects'
-                />
-              }
-              {
-                <Filter
-                    options={results.list.tags}
-                    property='tags'
-                    selected={filters.tags}
-                    setSelected={setSelected.bind(null, 'tags')}
-                    title='Tags'
-                />
-              }
-              {
-                <Filter
-                    options={results.list.types}
-                    property='types'
-                    selected={filters.types}
-                    setSelected={setSelected.bind(null, 'types')}
-                    title='Types'
-                />
-              }
-              {
-                <Filter
-                    options={results.list.users}
-                    property='users'
-                    selected={filters.users}
-                    setSelected={setSelected.bind(null, 'users')}
-                    title='Users'
-                />
-              }
-            </>
-          }
+          { Filters({ filters, groupingOn, list: results.list, onSelect: setSelected }) }
 
         </div>
         <div className=' h-full'>

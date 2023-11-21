@@ -31,11 +31,12 @@ const Option = (data) => {
         <label className='w-full h-full flex items-center'>
           <input
               className='mr-2'
+              defaultChecked={selected}
               onChange={ onClick }
               type='checkbox'
               value={option}
           />
-          { option }
+          <span className='capitalize mr-1'>{ option }</span>
         </label>
       </div>
   );
@@ -101,7 +102,7 @@ export default ({ options, selected, setSelected, title  }) => {
   return (
       <div className='relative mr-4' id={ id }>
         <div className='flex hover:text-black text-slate-400' onClick={ toggleShow }>
-          <span>{ title }</span>
+          <span className='capitalize'>{ title }</span>
           { !!selected.length &&
             <span className='ml-1 inline-block w-7 h-7 bg-black text-white flex justify-center items-center rounded-full'>{ selected.length }</span>
           }

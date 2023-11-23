@@ -1,10 +1,15 @@
 ---
-users: [user18@email.com]
-status: Draft
-tags: [tagF, tag55]
-type: Epic
 id: Di5JvdGN6qY-CueqE2PCL
-priority: High
+path: 
+filename: one.md
+priority: Highest
+project: 
+status: Draft
+title: one
+type: Epic
+tags: [tag55, tagF]
+users: [user18@email.com]
+created: 1700360418274
 ---
 <!-- GENERATED WITH GITDOWN; DO NOT CHANGE -->
 

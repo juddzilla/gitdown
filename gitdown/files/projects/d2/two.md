@@ -2,7 +2,7 @@
 id: S-Ez5nxcwS0P8j7ZdRzKb
 path: d2
 filename: two.md
-priority: Highest
+priority: High
 project: d2
 status: In Progress
 title: two

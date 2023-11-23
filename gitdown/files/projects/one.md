@@ -7,7 +7,7 @@ project:
 status: Draft
 title: one
 type: Epic
-tags: [tag55, tagF]
+tags: [tag55]
 users: [user18@email.com]
 created: 1700360418274
 ---

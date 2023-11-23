@@ -8,7 +8,7 @@ status: Open
 title: three
 type: Task
 tags: [tag34]
-users: [user18@email.com, user62@email.com]
+users: [user62@email.com]
 created: 1700360418276
 ---
 <!-- GENERATED WITH GITDOWN; DO NOT CHANGE -->

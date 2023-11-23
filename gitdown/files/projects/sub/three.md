@@ -2,7 +2,7 @@
 id: w2H0rbM_Oepz9qAZ_4pz2
 path: sub
 filename: three.md
-priority: High
+priority: Highest
 project: sub
 status: Open
 title: three

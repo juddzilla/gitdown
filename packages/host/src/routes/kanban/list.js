@@ -1,7 +1,7 @@
 import Domain from '../interfaces/domain';
 
 const handler = async (req, res) => {
-  const results = await Domain.Kanban(req.DATA);
+  const results = await Domain.Kanban.List(req.DATA);
   return res.send({ results });
 }
 

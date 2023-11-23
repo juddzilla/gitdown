@@ -7,7 +7,7 @@ project: d2
 status: In Progress
 title: THREfE
 type: Use Case
-tags: [tag3, tag34, tagF]
+tags: [tag3, tag34]
 users: [user18@email.com, user2@email.com, user62@email.com]
 created: 1700360418272
 ---

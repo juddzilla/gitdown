@@ -2,7 +2,7 @@
 id: Di5JvdGN6qY-CueqE2PCL
 path: 
 filename: one.md
-priority: Highest
+priority: High
 project: 
 status: Draft
 title: one

@@ -7,7 +7,7 @@ project: sub
 status: Open
 title: three
 type: Task
-tags: [tag55, tagF]
+tags: [tag55]
 users: [user18@email.com, user62@email.com]
 created: 1700360418276
 ---

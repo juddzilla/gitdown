@@ -27,13 +27,11 @@ export const findBoardSectionContainer = (
   if (id in boardSections) {
     return id;
   }
-
-  return Object.keys(boardSections).find((key) =>
-      boardSections[key].find((item) => item.id === id)
-  );
+  const parts = id.split(':');
+  return parts[1];
 };
 
-const BoardSectionList = (tasks, onDrop) => {
+const BoardSectionList = (group, tasks, onDrop) => {
   const initialBoardSections = tasks.reduce((acc, cur) => {
     acc[cur.name || '(none)'] = cur.results;
     return acc;
@@ -44,7 +42,11 @@ const BoardSectionList = (tasks, onDrop) => {
 
   useEffect(() => {
     setBoardSections(initialBoardSections);
-  }, [tasks])
+  }, [tasks]);
+
+  useEffect(() => {
+    setActiveTaskId(null);
+  }, [group]);
 
   const sensors = useSensors(
       useSensor(PointerSensor),
@@ -59,7 +61,6 @@ const BoardSectionList = (tasks, onDrop) => {
 
 
   const handleDragOver = ({ active, over }: DragOverEvent) => {
-    // Find the containers
     const activeContainer = findBoardSectionContainer(
         boardSections,
         active.id as string
@@ -68,7 +69,6 @@ const BoardSectionList = (tasks, onDrop) => {
         boardSections,
         over?.id as string
     );
-
 
     if (
         !activeContainer ||
@@ -79,17 +79,16 @@ const BoardSectionList = (tasks, onDrop) => {
     }
 
     setBoardSections((boardSection) => {
-      const activeItems = boardSection[activeContainer];
-      const overItems = boardSection[overContainer];
-      const activeIndex = activeItems.findIndex(
-          (item) => item.id === active.id
-      );
+      const activeItems = boardSection[activeContainer].filter(Boolean);
+      const overItems = boardSection[overContainer].filter(Boolean);
+
+      const activeIndex = activeItems.findIndex((item) => item.id === active.id);
       const overIndex = overItems.findIndex((item) => item.id !== over?.id);
 
       return {
         ...boardSection,
         [activeContainer]: [
-          ...boardSection[activeContainer].filter(
+          ...boardSection[activeContainer].filter(Boolean).filter(
               (item) => item.id !== active.id
           ),
         ],
@@ -106,6 +105,7 @@ const BoardSectionList = (tasks, onDrop) => {
   };
 
   const handleDragEnd = ({ active, over }: DragEndEvent) => {
+    const parts = active.id.split(':');
     const activeContainer = findBoardSectionContainer(
         boardSections,
         active.id as string
@@ -118,19 +118,19 @@ const BoardSectionList = (tasks, onDrop) => {
     if (
         !activeContainer ||
         !overContainer ||
-        activeContainer !== overContainer
+        activeContainer === overContainer
     ) {
       return;
     }
 
     const activeIndex = boardSections[activeContainer].findIndex(
-        (task) => task.id === active.id
-    );
-    const overIndex = boardSections[overContainer].findIndex(
-        (task) => task.id === over?.id
+        (task) => task.id === parts[1]
     );
 
-    onDrop({ destination: overContainer, item: task });
+    const overIndex = boardSections[overContainer].filter(Boolean).findIndex(
+        (task) => task.id === parts[1]
+    );
+    onDrop({ from: activeContainer, to: overContainer, item: task });
 
     if (activeIndex !== overIndex) {
       setBoardSections((boardSection) => ({
@@ -152,37 +152,35 @@ const BoardSectionList = (tasks, onDrop) => {
   };
 
   const getTaskById = (T, activeId) => {
-    const group = T.find(t => t.results.some(item => item.id === activeId));
-    return group.results.find(i => i.id === activeId);
+    const parts = activeId.split(':');
+    const data = T.find(t => t.name === parts[1]);
+    return data.results.find(i => i.id === parts[2]);
   };
 
   const task = activeTaskId ? getTaskById(tasks, activeTaskId) : null;
-
   return (
-      <div>
-        <DndContext
-            sensors={sensors}
-            collisionDetection={closestCorners}
-            onDragStart={handleDragStart}
-            onDragOver={handleDragOver}
-            onDragEnd={handleDragEnd}
-        >
-          <div className='border border-black flex'>
-            {Object.keys(boardSections).map((boardSectionKey) => (
-                <div className='border border-red' key={boardSectionKey}>
-                  <Droppable
-                      id={boardSectionKey}
-                      title={boardSectionKey}
-                      tasks={boardSections[boardSectionKey]}
-                  />
-                </div>
-            ))}
-            <DragOverlay dropAnimation={dropAnimation}>
-              { task ? <Draggable id={task.id}><Card data={task} /></Draggable> : null}
-            </DragOverlay>
-          </div>
-        </DndContext>
-      </div>
+      <DndContext
+          sensors={sensors}
+          collisionDetection={closestCorners}
+          onDragStart={handleDragStart}
+          onDragOver={handleDragOver}
+          onDragEnd={handleDragEnd}
+      >
+        <div className='flex h-full'>
+          {Object.keys(boardSections).map((boardSectionKey) => (
+              <div className='mr-2 bg-slate-50' key={boardSectionKey}>
+                <Droppable
+                    id={[group, boardSectionKey].join(':')}
+                    title={boardSectionKey}
+                    tasks={boardSections[boardSectionKey]}
+                />
+              </div>
+          ))}
+          <DragOverlay dropAnimation={dropAnimation}>
+            { task ? <Draggable id={task.id}><Card data={task} /></Draggable> : null}
+          </DragOverlay>
+        </div>
+      </DndContext>
   );
 };
 

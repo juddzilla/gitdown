@@ -10,7 +10,6 @@ export default async (data) => {
   const FileHandler = new Markdown.Handler(filepath);
   const fileData = await FileHandler.getData();
   const html = Markdown.ToHtml(fileData.body);
-  // const metadata = await Database.Models.Documents.Find(data.document_id);
 
   return {
     metadata: fileData.metadata,

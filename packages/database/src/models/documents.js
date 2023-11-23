@@ -104,22 +104,6 @@ export default class Documents extends Base {
 
     const separator = matchAll && matchAll === 'true' ? 'AND' : 'OR';
 
-  //   const parts = [`
-  //     SELECT
-  //     documents.*,
-  //     group_concat(DISTINCT document_tags.tag) as tags,
-  //     group_concat(DISTINCT document_users.user_id) as users
-  //     FROM documents
-  //     LEFT JOIN
-  //     document_tags
-  //     ON documents.id = document_tags.document_id
-  //     LEFT JOIN
-  //     document_users
-  //     ON documents.id = document_users.document_id
-  //     WHERE documents.id = '${id}'
-  //     GROUP BY documents.id
-  // `];
-
     const joins = [
       'JOIN document_paths on document_paths.document_id = documents.id',
       'JOIN document_tags on documents.id = document_tags.document_id',
@@ -199,7 +183,6 @@ export default class Documents extends Base {
         where.push(splitUsersWhereBlock);
       }
     }
-
 
     const joinBlock = joins.join(' ');
     const returnBlock = returnColumns.join(', ');

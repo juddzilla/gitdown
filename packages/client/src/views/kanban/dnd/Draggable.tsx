@@ -24,7 +24,7 @@ const SortableTaskItem = ({ children, id }: SortableTaskItemProps) => {
   };
 
   return (
-      <div ref={setNodeRef} style={style} {...attributes} {...listeners}>
+      <div className='' ref={setNodeRef} style={style} {...attributes} {...listeners}>
         {children}
       </div>
   );

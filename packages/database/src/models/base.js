@@ -33,16 +33,27 @@ export default class Base {
     return results.length? results : [];
   }
 
-  Create(data) {
+  async Create(data) {
+    const keys = await this.tableSchemaColumns();
+    console.log('data', this.name, keys);
+
+    // const updateValues = columns.reduce((acc, cur) => {
+    //   if (Object.hasOwn(data, cur)) {
+    //     acc[cur] = data[cur];
+    //   }
+    //   return acc;
+    // }, {});
+    // console.log('columns', columns);
     const preparedStatement = insertInto(this.name);
-    const keys = Object.keys(data);
+    // const keys = Object.keys(columns);
     const keysStatement = `(${keys.join(',')})`;
     const values = keys.map((key) => `'${data[key]}'`).join(',');
     const valueStatement = `(${values})`;
+    // const valueStatement = keyEqualsStringArray(updateValues);
     const statement = [preparedStatement, keysStatement, 'VALUES', valueStatement].join(' ');
-
     const response = { ...data };
 
+    console.log('statement', this.name, statement);
     const [err, results] = this.write(statement);
 
     if (err) {
@@ -143,12 +154,12 @@ export default class Base {
     }
   }
 
-  async tableSchemaColumns() {
+  async tableSchemaColumns(noId) {
     const filename = `${this.name}.json`;
     // const schema = await import(`../schemas/${filename}`, { assert: { type: "json" }});
     const schema = require(`../schemas/${filename}`);
 
-    if (Object.hasOwn(schema.columns, 'id')) {
+    if (noId && Object.hasOwn(schema.columns, 'id')) {
       delete schema.columns.id;
     }
 
@@ -156,7 +167,7 @@ export default class Base {
   }
 
   async Update(condition, data) {
-    const columns = await this.tableSchemaColumns();
+    const columns = await this.tableSchemaColumns(true);
     const updateValues = columns.reduce((acc, cur) => {
       if (Object.hasOwn(data, cur)) {
         acc[cur] = data[cur];
@@ -206,7 +217,7 @@ export default class Base {
     if (err) {
       return [];
     }
-    return results.map(result => result[name]);
+    return results.map(result => result[name].length ? result[name] : '(none)');
   }
 
   Where(condition) {

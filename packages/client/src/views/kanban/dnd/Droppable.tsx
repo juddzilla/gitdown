@@ -9,12 +9,10 @@ import Card from '../Card';
 import Draggable from './Draggable';
 
 const BoardSection = ({ id, title, tasks }) => {
-  const { setNodeRef } = useDroppable({
-    id,
-  });
+  const { setNodeRef } = useDroppable({ id });
 
   return (
-      <div style={{ backgroundColor: '#eee', padding: 2 }}>
+      <div className='w-96 px-4'>
         <div>
           {title}
         </div>
@@ -24,13 +22,18 @@ const BoardSection = ({ id, title, tasks }) => {
             strategy={verticalListSortingStrategy}
         >
           <div ref={setNodeRef}>
-            {tasks.map((task) => (
-                <div key={task.id} className='mb-2'>
-                  <Draggable id={task.id}>
-                    <Card data={task} />
-                  </Draggable>
-                </div>
-            ))}
+            {
+              tasks.filter(Boolean).map((task) => {
+              const draggableId = [id,task.id].join(':');
+              return (
+
+                  <div key={ task.id } id={ task.id }>
+                    <Draggable id={ draggableId }>
+                      <Card data={ task } />
+                    </Draggable>
+                  </div>
+              )
+            })}
           </div>
         </SortableContext>
       </div>

@@ -11,10 +11,6 @@
     "method": "get",
     "path": "/search"
   },
-  "Kanban": {
-    "method": "get",
-    "path": "/kanban"
-  },
   "Home": {
     "method": "get",
     "path": "/home"
@@ -46,6 +42,14 @@
   "Lists": {
     "method": "get",
     "path": "/lists"
+  },
+  "KanbanMove": {
+    "method": "put",
+    "path": "/kanban/:id"
+  },
+  "Kanban": {
+    "method": "get",
+    "path": "/kanban"
   },
   "DocumentUpdate": {
     "method": "put",

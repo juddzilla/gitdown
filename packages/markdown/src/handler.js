@@ -37,8 +37,6 @@ export default class MarkdownHandler {
   }
 
   async createFile({ body, metadata }) {
-    // const FilePath = await Database.Models.DocumentPath.ToFullPath({ project: metadata.project, title: `${metadata.title}.md` });
-    // this.filepath
     const ProjectPath = await Database.Models.DocumentPath.ProjectPath({ project: metadata.project });
     fs.mkdirSync(path.dirname(ProjectPath), { recursive: true });
     if (fs.existsSync(this.filepath)) {
@@ -118,7 +116,7 @@ export default class MarkdownHandler {
     const stringifiedMetadata = stringifyMetadata(rest);
     const metadataBlock = createMetadataBlock(stringifiedMetadata);
     const content = metadataBlock.concat(this.body);
-
+    console.log('saveFile ', this.metadata);
     try {
       await writeFile(this.filepath, content);
     } catch (err) {

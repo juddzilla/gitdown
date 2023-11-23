@@ -22,6 +22,7 @@ class WebSocketHost {
   }
 
   sendMessage(message) {
+    console.log('send mesage', message);
     if (this.ws) {
       const stringified = JSON.stringify(message);
       console.log('@@@@@@@ HOST sent', stringified);

@@ -23,8 +23,9 @@ export default async function (data) {
 
   const { id } = rest;
 
-  DocumentPath.Create({ document_id: id }, Locations);
-  DocumentTags.Create({ document_id: id }, { tag: tags });
-  DocumentUsers.Create({ document_id: id }, { user_id: users });
-  Documents.Create({ ...rest, project: Locations.project, title: Locations.title });
+  console.log('POPULATE res', rest);
+  await DocumentPath.Create({ document_id: id }, Locations);
+  await DocumentTags.Create({ document_id: id }, { tag: tags });
+  await DocumentUsers.Create({ document_id: id }, { user_id: users });
+  await Documents.Create({ ...rest, project: Locations.project, title: Locations.title });
 }

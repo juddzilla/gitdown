@@ -1,4 +1,4 @@
-import Domain from '../interfaces/domain';
+import Domain from '../../interfaces/domain.js';
 
 const handler = async (req, res) => {
   const results = await Domain.Kanban.List(req.DATA);

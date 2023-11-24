@@ -4,7 +4,7 @@ users: [user18@email.com, user2@email.com]
 created: 1700360418275
 due: null
 priority: Highest
-status: Draft
+status: In Progress
 type: Bug
 project: sub
 title: bbbd

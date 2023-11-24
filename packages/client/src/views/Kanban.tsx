@@ -59,34 +59,35 @@ const filterMap = {
 
 const Component = () => {
   const results = useLoaderData();
+  const [DATA, setDATA] = useState(results.data.results);
   const [data, setData] = useState(results.data.results);
 
   const [filters, setFilters] = useState(initialFilters);
   const [group, setGroup] = useState(initialGroup);
   const webSocket = useRef(null);
 
-  useEffect(() => {
-    request({ group }).then(res => {
-      setData(res.results);
-    });
-  }, [group, setData]);
-
-  useEffect(() => {
-    const filterOn = Object.keys(filters).reduce((acc, key) => {
-      if (filters[key].length) {
-        acc[filterMap[key]] = filters[key];
+  // let DATA = [...data];
+  console.log('DATA', DATA);
+  const applyFilter = (list, f) => {
+    console.log('list, f', list, f);
+    const filterOn = Object.keys(f).reduce((acc, key) => {
+      if (f[key].length) {
+        acc[filterMap[key]] = f[key];
       }
 
       return acc;
     }, {});
 
-    if (!Object.keys(filterOn).length) {
-      setData(results.data.results);
-      return;
-    }
+    console.log('filterOn', filterOn);
 
-    const newData = results.data.results.map(data => {
-      const results = data.results.filter(result => {
+    if (!Object.keys(filterOn).length) {
+      return list;
+    }
+    console.log('POST filterOn');
+
+
+    return list.map(d => {
+      const results = d.results.filter(result => {
         const keys = Object.keys(filterOn);
         const hasKey = keys.some(key => {
           if (Array.isArray(result[key])) {
@@ -95,6 +96,7 @@ const Component = () => {
             return filterOn[key].includes(result[key])
           }
         });
+
         if (hasKey) {
           return result;
         }
@@ -102,10 +104,24 @@ const Component = () => {
       }).filter(Boolean);
 
       return {
-        ...data, results
+        ...d, results
       };
-    });
 
+    });
+  };
+
+  useEffect(() => {
+    request({ group }).then(res => {
+      setDATA(res.results);
+      const filtered = applyFilter(res.results, filters);
+      setData(filtered);
+    });
+  }, [group, setData]);
+
+  useEffect(() => {
+    const newData = applyFilter(DATA, filters);
+
+      console.log('newData', newData);
     setData(newData);
   }, [filters]);
 

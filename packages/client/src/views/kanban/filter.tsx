@@ -7,7 +7,7 @@ const Option = (data) => {
     option,
     selected,
   } = data;
-  console.log('filte data', data);
+  // console.log('filte data', data);
 
   const classList = [
     'cursor-pointer',
@@ -46,13 +46,15 @@ const Option = (data) => {
 export default ({ options, selected, setSelected, title  }) => {
   const id = `filter-${title}`;
 
-  console.log('options', id, options);
-
   const [data, setData] = useState(options);
   const [search, setSearch] = useState('');
   const [show, setShow] = useState(false);
 
-  useEffect(()=>{
+  useEffect(() => {
+    setData(options);
+  }, [options]);
+
+  useEffect(() => {
     const handleClick=({ target })=>{
       if (show) {
         const container = document.getElementById(id);

@@ -9,7 +9,6 @@ const links = [
   { display: 'Kanban', icon: 'kanban', path: '/kanban' },
   { display: 'Documents', icon: 'document', path: '/documents' },
   { display: 'Projects', icon: 'folder', path: '/projects' },
-  { display: 'Tags', icon: 'tag', path: '/tags' },
 ];
 
 export default () => {

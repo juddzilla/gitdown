@@ -38,7 +38,7 @@ export default class MarkdownHandler {
 
   async createFile({ body, metadata }) {
     const ProjectPath = await Database.Models.DocumentPath.ProjectPath({ project: metadata.project });
-    fs.mkdirSync(path.dirname(ProjectPath), { recursive: true });
+    fs.mkdirSync(ProjectPath, { recursive: true });
     if (fs.existsSync(this.filepath)) {
       return { error: `A document name ${metadata.title} that name already exists in ${metadata.project}` };
     }

@@ -1,5 +1,5 @@
 import type { ReactElement } from 'react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import moment from 'moment';
 
@@ -8,7 +8,7 @@ const emptyValue = (): ReactElement => (
 );
 
 const plainText = (value):ReactElement => {
-  if (!value) {
+  if (!value || value === 'null') {
     return emptyValue();
   }
   return (
@@ -17,7 +17,7 @@ const plainText = (value):ReactElement => {
 };
 
 const dateField = (date):ReactElement => {
-  if (date === 'null' || !date) {
+  if (date === 'null' || !date || isNaN(date)) {
     return emptyValue();
   }
   return (
@@ -69,13 +69,25 @@ const defaultSort = {
 };
 
 export default (tableInfo):ReactElement => {
+  console.log('tableInfo',tableInfo);
   const doSort = (sortConfig, rows) => rows.sort((a, b) => {
     const { column, direction } = sortConfig;
-    const x = a[column].toLowerCase();
-    const y = b[column].toLowerCase();
+    let x = a[column];
+    let y = b[column];
+
+    if (isNaN(a[column])) {
+      x = a[column].toLowerCase();
+    }
+
+    if (isNaN(b[column])) {
+      y = b[column].toLowerCase();
+    }
 
     const first = direction === 'desc' ? x : y;
     const second = first === x ? y : x;
+
+    // console.log('first', first);
+    // console.log('second', second);
 
     if (first > second) { return 1; }
     if (first < second) { return -1; }
@@ -84,6 +96,11 @@ export default (tableInfo):ReactElement => {
 
   const [data, setData] = useState(doSort(defaultSort, tableInfo));
   const [sort, setSort] = useState(defaultSort);
+
+  useEffect(() => {
+    console.log('sort', doSort(sort, tableInfo));
+    setData(doSort(sort, data));
+  }, [sort]);
 
   function chooseSort(column) {
     let direction = 'desc';
@@ -96,8 +113,6 @@ export default (tableInfo):ReactElement => {
       direction,
     };
     setSort(newSort);
-    const newData = doSort(newSort, data);
-    setData(newData);
   }
 
   return (

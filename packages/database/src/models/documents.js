@@ -68,6 +68,7 @@ export default class Documents extends Base {
     }
   }
 
+
   query(statement) {
     const results = super.query(statement);
     if (results[0] !== null) {
@@ -96,6 +97,7 @@ export default class Documents extends Base {
 
 
   Search(params) {
+    console.log('params', params);
     const {
       group,
       query,

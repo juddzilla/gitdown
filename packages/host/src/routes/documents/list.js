@@ -1,7 +1,8 @@
 import Domain from '../../interfaces/domain';
 
 const handler = async (req, res) => {
-  const documents = await Domain.Documents.List();
+  console.log('req.DATA', req.DATA);
+  const documents = await Domain.Documents.List(req.DATA);
   return res.send(documents);
 };
 

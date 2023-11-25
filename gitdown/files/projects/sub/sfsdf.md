@@ -1,11 +1,11 @@
 ---
-tags: null
-users: null
-archived: null
+tags: []
+users: []
+archived: 
 created: 1700162941000
 due: 1700162938637
 priority: Normal
-status: null
+status: 
 type: Bug
 project: sub
 title: sfsdf

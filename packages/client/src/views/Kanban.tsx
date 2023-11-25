@@ -120,8 +120,6 @@ const Component = () => {
 
   useEffect(() => {
     const newData = applyFilter(DATA, filters);
-
-      console.log('newData', newData);
     setData(newData);
   }, [filters]);
 

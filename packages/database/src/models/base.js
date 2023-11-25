@@ -47,7 +47,7 @@ export default class Base {
     const preparedStatement = insertInto(this.name);
     // const keys = Object.keys(columns);
     const keysStatement = `(${keys.join(',')})`;
-    const values = keys.map((key) => `'${data[key]}'`).join(',');
+    const values = keys.map((key) => `'${data[key] || ''}'`).join(',');
     const valueStatement = `(${values})`;
     // const valueStatement = keyEqualsStringArray(updateValues);
     const statement = [preparedStatement, keysStatement, 'VALUES', valueStatement].join(' ');
@@ -102,9 +102,21 @@ export default class Base {
     this.db = await Instance();
   }
 
-  List() {
-    const statement = `SELECT rowid, * FROM ${this.name}`;
-    // console.log('statement', statement);
+  List(params) {
+    const parts = [`SELECT rowid, * FROM ${this.name}`];
+
+    if (params && Object.hasOwn(params, 'order')) {
+      parts.push(`ORDER BY ${ params.order } COLLATE NOCASE`);
+    }
+
+    if (params && Object.hasOwn(params, 'direction')) {
+      parts.push(`${ params.direction }`);
+    } else {
+      parts.push('ASC');
+    }
+
+    const statement = parts.join(' ');
+
     const [err, results] = this.query(statement);
 
     if (err) {
@@ -156,7 +168,6 @@ export default class Base {
 
   async tableSchemaColumns(noId) {
     const filename = `${this.name}.json`;
-    // const schema = await import(`../schemas/${filename}`, { assert: { type: "json" }});
     const schema = require(`../schemas/${filename}`);
 
     if (noId && Object.hasOwn(schema.columns, 'id')) {
@@ -221,6 +232,7 @@ export default class Base {
   }
 
   Where(condition) {
+    console.log('condition', condition);
     if (!condition || !Object.keys(condition).length) {
       return this.List();
     }

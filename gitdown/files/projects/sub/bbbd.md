@@ -3,7 +3,7 @@ tags: [tagF]
 users: [user18@email.com, user2@email.com]
 created: 1700360418275
 due: 
-priority: Highest
+priority: 1
 status: In Progress
 type: Bug
 project: sub

@@ -4,7 +4,7 @@ users: []
 archived: 
 created: 1700161225552
 due: 1700161220480
-priority: Normal
+priority: 3
 status: 
 type: Bug
 project: Project10

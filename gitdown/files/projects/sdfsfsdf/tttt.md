@@ -3,7 +3,7 @@ tags: []
 users: []
 created: 1700855823441
 due: 1700855821294
-priority: Normal
+priority: 3
 status: Draft
 type: task
 project: sdfsfsdf

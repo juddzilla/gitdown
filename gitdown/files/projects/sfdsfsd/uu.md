@@ -3,7 +3,7 @@ tags: []
 users: []
 created: 1700855882877
 due: 1700855876656
-priority: Normal
+priority: 3
 status: Draft
 type: use-case
 project: sfdsfsd

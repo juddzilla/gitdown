@@ -4,7 +4,7 @@ users: []
 archived: 
 created: 1700163305154
 due: 1700163301331
-priority: Normal
+priority: 3
 status: 
 type: Epic
 project: Project10

@@ -2,7 +2,7 @@
 id: wDcEz9xRcLstAoZv1Rvsf
 path: d2
 filename: THREfE.md
-priority: Lowest
+priority: 5
 project: d2
 status: In Progress
 title: THREfE

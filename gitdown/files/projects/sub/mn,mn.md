@@ -3,7 +3,7 @@ tags: []
 users: []
 created: 1700194147184
 due: 1700194144902
-priority: Normal
+priority: 3
 status: 
 type: UseCase
 project: sub

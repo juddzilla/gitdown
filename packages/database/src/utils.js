@@ -6,16 +6,22 @@ export const arrayValueStatement = (table, data) => {
 };
 
 
-export const keyEqualsStringArray = (data) => Object.keys(data)
-  .map((key) => {
-    const value = data[key];
-    const val = Number.isInteger(value) ? value : `'${value}'`;
-    if (truthyValue(value)) {
-      return `${key} = ${val}`;
-    }
-  })
-  .filter(Boolean)
-  .join(',');
+export const keyEqualsStringArray = (data) => {
+  if (!data) {
+    return false;
+  }
+
+  return Object.keys(data)
+      .map((key) => {
+        const value = data[key];
+        const val = Number.isInteger(value) ? value : `'${value}'`;
+        if (truthyValue(value)) {
+          return `${key} = ${val}`;
+        }
+      })
+      .filter(Boolean)
+      .join(',');
+}
 
 export const keyEqualsStringArrayAnd = (data) => Object.keys(data)
     .map((key) => {

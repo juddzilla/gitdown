@@ -64,20 +64,6 @@ const Component = ({ onSave }): ReactElement => {
               />
             </div>
           </div>
-
-          <div className='w-64 ml-8 flex items-center'>
-            <button
-                className={`
-                rounded-md uppercase text-white
-                disabled:text-stone-400 disabled:bg-slate-50 disabled:border-slate-100 disabled:shadow-none
-                bg-${metadata.type.replace(' ', '-').toLowerCase()}-primary border-${metadata.type.replace(' ', '-').toLowerCase()}-secondary disabled:shadow-none
-                h-12 w-full`}
-                disabled={ !canSave }
-                onClick={ save }
-            >
-              Save
-            </button>
-          </div>
         </div>
         <div className='flex'>
           <div className="max-w-prose w-full">
@@ -90,6 +76,19 @@ const Component = ({ onSave }): ReactElement => {
                 metadata={ metadata }
                 update={ updateMetadata }
             />
+            <div className='w-64 flex items-center'>
+              <button
+                  className={`
+                rounded-md uppercase text-white
+                disabled:text-stone-400 disabled:bg-slate-50 disabled:border-slate-100 disabled:shadow-none
+                bg-${metadata.type.replace(' ', '-').toLowerCase()}-primary border-${metadata.type.replace(' ', '-').toLowerCase()}-secondary disabled:shadow-none
+                h-12 w-full`}
+                  disabled={ !canSave }
+                  onClick={ save }
+              >
+                Save
+              </button>
+            </div>
           </div>
         </div>
       </div>

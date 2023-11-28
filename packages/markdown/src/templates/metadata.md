@@ -3,7 +3,7 @@ tags: []
 users: []
 created:
 due:
-priority: Normal
+priority: 3
 status: Draft
 type:
 ---

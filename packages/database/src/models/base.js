@@ -107,16 +107,23 @@ export default class Base {
 
     if (params && Object.hasOwn(params, 'order')) {
       parts.push(`ORDER BY ${ params.order } COLLATE NOCASE`);
+      delete params.order;
     }
 
     if (params && Object.hasOwn(params, 'direction')) {
       parts.push(`${ params.direction }`);
+      delete params.direction;
     } else {
       parts.push('ASC');
     }
 
-    const statement = parts.join(' ');
+    const where = keyEqualsStringArray(params);
 
+    if (where) {
+      parts.push('WHERE', where);
+    }
+
+    const statement = parts.filter(Boolean).join(' ');
     const [err, results] = this.query(statement);
 
     if (err) {

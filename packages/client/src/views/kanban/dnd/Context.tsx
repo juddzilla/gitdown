@@ -49,14 +49,21 @@ const BoardSectionList = (group, tasks, onDrop) => {
   }, [group]);
 
   const sensors = useSensors(
-      useSensor(PointerSensor),
       useSensor(KeyboardSensor, {
         coordinateGetter: sortableKeyboardCoordinates,
+      }),
+      useSensor(PointerSensor, {
+        activationConstraint: {
+          distance: 8,
+        },
       })
   );
 
   const handleDragStart = ({ active }: DragStartEvent) => {
-    setActiveTaskId(active.id as string);
+    const parts = active.id.split(':');
+    const section = parts[parts.length - 2];
+    const id = parts[parts.length - 1];
+    setActiveTaskId(`${section}:${id}` as string);
   };
 
 
@@ -124,12 +131,13 @@ const BoardSectionList = (group, tasks, onDrop) => {
     }
 
     const activeIndex = boardSections[activeContainer].findIndex(
-        (task) => task.id === parts[1]
+        (task) => task.id === parts[parts.length - 1]
     );
 
     const overIndex = boardSections[overContainer].filter(Boolean).findIndex(
-        (task) => task.id === parts[1]
+        (task) => task.id === parts[parts.length - 1]
     );
+
     onDrop({ from: activeContainer, to: overContainer, item: task });
 
     if (activeIndex !== overIndex) {
@@ -153,26 +161,26 @@ const BoardSectionList = (group, tasks, onDrop) => {
 
   const getTaskById = (T, activeId) => {
     const parts = activeId.split(':');
-    const data = T.find(t => t.name === parts[1]);
-    return data.results.find(i => i.id === parts[2]);
+    const data = T.find(t => `${t.name}` === parts[0]);
+    return data.results.find(i => i.id === parts[1]);
   };
 
   const task = activeTaskId ? getTaskById(tasks, activeTaskId) : null;
   return (
       <DndContext
-          sensors={sensors}
-          collisionDetection={closestCorners}
-          onDragStart={handleDragStart}
-          onDragOver={handleDragOver}
-          onDragEnd={handleDragEnd}
+          sensors={ sensors }
+          collisionDetection={ closestCorners }
+          onDragStart={ handleDragStart }
+          onDragOver={ handleDragOver }
+          onDragEnd={ handleDragEnd }
       >
         <div className='flex h-full'>
           {Object.keys(boardSections).map((boardSectionKey) => (
-              <div className='mr-2 bg-slate-50' key={boardSectionKey}>
+              <div className='mr-2 bg-slate-50' key={ boardSectionKey }>
                 <Droppable
-                    id={[group, boardSectionKey].join(':')}
-                    title={boardSectionKey}
-                    tasks={boardSections[boardSectionKey]}
+                    id={ [group, boardSectionKey].join(':') }
+                    title={ boardSectionKey }
+                    tasks={ boardSections[boardSectionKey] }
                 />
               </div>
           ))}

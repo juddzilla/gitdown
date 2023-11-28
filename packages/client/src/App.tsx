@@ -3,9 +3,9 @@ import Navigation from './components/Navigation';
 
 function App() {
   return (
-    <div className='relative min-h-screen min-w-full'>
+    <div className='relative min-h-screen min-w-full flex'>
       <Navigation />
-      <main className="flex-1 p-6 ml-72 h-full ">
+      <main className="p-6 h-full">
         <div className="prose max-w-none h-full">
           <Outlet />
         </div>

@@ -4,6 +4,8 @@ import type { ReactElement } from 'react';
 import { useEffect, useState } from 'react';
 import moment from 'moment';
 
+import Table from '../styles/tables';
+
 const request = async (params) => await API.Documents(params);
 
 const emptyValue = (): ReactElement => (
@@ -120,54 +122,57 @@ const Component = () => {
         <div>
           <h1>Documents</h1>
         </div>
-        <div className="p-8">
-          <table>
-            <thead>
-            <tr>
-              { columns.map((column, index) => {
-                const classList = ['capitalize'];
-                let sortClassList = ['border-black'];
-
-                if (sort.order === column.key) {
-                  if (sort.direction === 'asc') {
-                    sortClassList.push('border-t-4');
-                  } else {
-                    sortClassList.push('border-b-4');
+        <div className='w-full'>
+          <div className={ Table.container }>
+            <table className={ Table.table }>
+              <thead>
+              <tr>
+                { columns.map((column, index) => {
+                  // const classList = ['capitalize'];
+                  let sortClassList = ['border-black'];
+                  //
+                  if (sort.order === column.key) {
+                    if (sort.direction === 'asc') {
+                      sortClassList.push('border-t-2');
+                    } else {
+                      sortClassList.push('border-b-2');
+                    }
                   }
-                }
-                return (
-                    <th
-                        className={ classList.join(' ') }
-                        key={index}
-                        onClick={ chooseSort.bind(null, column.key) }
-                    >
-                  <span className={ sortClassList.join(' ') }>
-                    { column.key }
-                  </span>
-                    </th>
-                )})}
-            </tr>
-            </thead>
-            <tbody>
-            {
-              data.map((row, index) => {
-                return (
-                    <tr key={index} className='h-8'>
-                      {
-                        columns.map((column, i) => (
-                            <td key={i} className=''>
-                              <Link to={`/documents/${row.id}`} className='no-underline  top-0 left-0  h-full p-2'>
-                                {column.component(row[column.key])}
-                              </Link>
-                            </td>
-                        ))
-                      }
-                    </tr>
-                );
-              })
-            }
-            </tbody>
-          </table>
+                  return (
+                      <th
+                          scope="col"
+                          className={ Table.th }
+                          key={index}
+                          onClick={ chooseSort.bind(null, column.key) }
+                      >
+                    <span className={ sortClassList.join(' ') }>
+                      { column.key }
+                    </span>
+                      </th>
+                  )})}
+              </tr>
+              </thead>
+              <tbody className="divide-y divide-gray-200">
+              {
+                data.map((row, index) => {
+                  return (
+                      <tr key={index} className={ Table.tbodyTr }>
+                        {
+                          columns.map((column, i) => (
+                              <td key={i} className={ Table.td }>
+                                <Link to={`/documents/${row.id}`} className={ Table.a }>
+                                  {column.component(row[column.key])}
+                                </Link>
+                              </td>
+                          ))
+                        }
+                      </tr>
+                  );
+                })
+              }
+              </tbody>
+            </table>
+          </div>
         </div>
       </>
   )

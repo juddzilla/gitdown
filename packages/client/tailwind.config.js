@@ -7,6 +7,7 @@ export default {
     "./index.html",
     "./src/**/*.{html,js,tsx}",
   ],
+  mode: 'jit',
   theme: {
     extend: {
       colors: {

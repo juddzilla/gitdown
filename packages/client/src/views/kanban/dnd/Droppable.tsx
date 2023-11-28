@@ -13,7 +13,7 @@ const BoardSection = ({ id, title, tasks }) => {
 
   return (
       <div className='w-96 px-4'>
-        <div>
+        <div className='text-center font-bold text-xl my-4'>
           {title}
         </div>
         <SortableContext

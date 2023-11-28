@@ -58,9 +58,9 @@ export default (props) => {
         }) }
         { !active ? (
             <div className='flex flex-wrap relative' onClick={ () => setActive(true) }>
-              {  (selected && selected.length) ? (
+              {  (Number.isInteger(selected) || selected && selected.length) ? (
                   <div className='flex items-center rounded cursor-pointer w-full p-2'>
-                    <span className='px-1 pr-0 w-full bg-white'>
+                    <span className='px-1 pr-0 w-full bg-white text-center'>
                       { selected }
                     </span>
                   </div>
@@ -108,9 +108,7 @@ export default (props) => {
                     };
 
                     return (
-                        <>
-                          { SelectOption(d) }
-                        </>
+                        SelectOption(d)
                     );
                   })
                 }

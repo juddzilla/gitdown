@@ -66,10 +66,7 @@ const Component = () => {
   const [group, setGroup] = useState(initialGroup);
   const webSocket = useRef(null);
 
-  // let DATA = [...data];
-  console.log('DATA', DATA);
   const applyFilter = (list, f) => {
-    console.log('list, f', list, f);
     const filterOn = Object.keys(f).reduce((acc, key) => {
       if (f[key].length) {
         acc[filterMap[key]] = f[key];
@@ -78,13 +75,9 @@ const Component = () => {
       return acc;
     }, {});
 
-    console.log('filterOn', filterOn);
-
     if (!Object.keys(filterOn).length) {
       return list;
     }
-    console.log('POST filterOn');
-
 
     return list.map(d => {
       const results = d.results.filter(result => {
@@ -152,8 +145,8 @@ const Component = () => {
 
     const grouping = { [group]: null };
 
-    const dataFromIndex = data.findIndex(column => column.name === from);
-    const dataToIndex = data.findIndex(column => column.name === to);
+    const dataFromIndex = data.findIndex(column => `${column.name}` === from);
+    const dataToIndex = data.findIndex(column => `${column.name}` === to);
 
     const existingFromItemIndex = data[dataFromIndex].results.findIndex(result => result.id === item.id);
     const existingToItemIndex = data[dataToIndex].results.findIndex(result => result.id === item.id);
@@ -195,10 +188,10 @@ const Component = () => {
   return (
       <div className='h-full'>
         <h1>Kanban</h1>
-        <div className='flex items-center mb-4 h-12'>
-          <div className='flex items-center mr-8'>
+        <div className='flex items-center mb-4 h-12 mr-2'>
+          <div className='flex items-center mr-8 border border-gray-200 rounded-lg px-2'>
             { Icon('columns', 'stroke-black') }
-            <select value={group} onChange={ chooseGroup }>
+            <select value={group} onChange={ chooseGroup } className="outline-none py-3 px-1 pe-9 block w-full border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none">
               { groups.map((option, index) => (
                   <option value={option.name} key={index}>
                     { option.display }
@@ -207,9 +200,8 @@ const Component = () => {
             </select>
           </div>
           <div className='flex items-center mr-4' >
-            { Icon(filterIcon, 'stroke-black') }
+            { Filters({ filters, groupingOn, list: results.list, onSelect: setSelected }) }
           </div>
-          { Filters({ filters, groupingOn, list: results.list, onSelect: setSelected }) }
 
         </div>
         <div className=' h-full'>

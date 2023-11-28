@@ -22,25 +22,27 @@ export default (params): ReactElement => {
                 value: metadata.due,
               }) }
 
-              { <SingleSelect
-                  display={ 'Priority' }
-                  options={ list.priorities }
-                  property={ 'priority' }
-                  selected={ metadata.priority }
-                  setSelected={ onChoice }
-                  title={ 'Priority' }
-              /> }
+              {  }
             </>
         }
 
-            <SingleSelect
-                display={ 'Status' }
-                options={ list.statuses }
-                property={ 'status' }
-                selected={ metadata.status }
-                setSelected={ onChoice }
-                title={ 'Status' }
-            />
+        <SingleSelect
+            display={ 'Priority' }
+            options={ list.priorities }
+            property={ 'priority' }
+            selected={ metadata.priority }
+            setSelected={ onChoice }
+            title={ 'Priority' }
+        />
+
+        <SingleSelect
+            display={ 'Status' }
+            options={ list.statuses }
+            property={ 'status' }
+            selected={ metadata.status }
+            setSelected={ onChoice }
+            title={ 'Status' }
+        />
 
         {   MultiSelect({
               allowCreate: true,

@@ -1,9 +1,9 @@
 export default {
   List: () => ([
-    'Highest',
-    'High',
-    'Normal',
-    'Low',
-    'Lowest',
+    1,
+    2,
+    3,
+    4,
+    5,
   ])
 }

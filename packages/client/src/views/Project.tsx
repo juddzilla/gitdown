@@ -3,6 +3,8 @@ import API from '../interfaces/host';
 import { Link, useLoaderData } from 'react-router-dom';
 import moment from 'moment';
 
+import Table from '../styles/tables';
+
 const emptyValue = (): ReactElement => (
     <span>--</span>
 );
@@ -60,47 +62,50 @@ const columns = [
 
 const Component = () => {
   const data = useLoaderData();
-  const { project, types } = data;
+  const { project, results, types } = data;
   return (
       <>
         <div>
-          <h1>{ project.project }</h1>
+          <h1>{ project }</h1>
         </div>
         <div>
           Create New
           { types.map((type, index) => (
-              <Link to={`/document/create?project=${project.project}&type=${type.replace(' ', '-').toLowerCase()}`} key={index}>[{ type }]</Link>
+              <Link to={`/document/create?project=${project}&type=${type.replace(' ', '-').toLowerCase()}`} key={index}>[{ type }]</Link>
           ))}
         </div>
-        <div className="p-8">
-          <table>
-            <thead>
-              <tr>
-                { columns.map((column, index) => (
-                    <th key={index} className='capitalize'>{ column.key }</th>
-                ))}
-              </tr>
-            </thead>
-            <tbody>
-              {
-                project.results.map((row, index) => {
-                  return (
-                      <tr key={index} className='h-8'>
-                        {
-                          columns.map((column, i) => (
-                              <td key={i} className='relative'>
-                                <Link to={`/documents/${row.id}`} className='absolute top-0 left-0 w-full h-full p-2'>
-                                  {column.component(row[column.key])}
-                                </Link>
-                              </td>
-                          ))
-                        }
-                      </tr>
-                  );
-                })
-              }
-            </tbody>
-          </table>
+        <div className='w-3/4'>
+
+          <div className={ Table.container }>
+            <table className={ Table.table }>
+              <thead>
+                <tr>
+                  { columns.map((column, index) => (
+                      <th key={index} className={ Table.th }>{ column.key }</th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                {
+                  results.map((row, index) => {
+                    return (
+                        <tr key={index} className={ Table.tbodyTr }>
+                          {
+                            columns.map(column => (
+                                <td key={ column.key }  className={ Table.td }>
+                                  <Link to={`/documents/${row.id}`} className={ Table.a }>
+                                    { column.component(row[column.key]) }
+                                  </Link>
+                                </td>
+                            ))
+                          }
+                        </tr>
+                    );
+                  })
+                }
+              </tbody>
+            </table>
+          </div>
         </div>
       </>
   )

@@ -136,11 +136,7 @@ export default (props) => {
                       selected: isSelected,
                     };
 
-                    return (
-                        <>
-                          { SelectOption(d) }
-                        </>
-                    );
+                    return ( SelectOption(d) );
                   })
                 }
               </div>

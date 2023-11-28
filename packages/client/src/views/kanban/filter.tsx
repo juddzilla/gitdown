@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import Dropdown from './dropdown';
 
 const Option = (data) => {
   const {
@@ -11,14 +12,13 @@ const Option = (data) => {
 
   const classList = [
     'cursor-pointer',
-    'even:bg-slate-50',
     'flex',
     'h-10',
-    'hover:bg-slate-300',
     'hover:font-bold',
     'items-center',
-    'odd:bg-slate-200',
-    'px-2'
+    'pl-2',
+    'w-full',
+    'z-10000',
   ];
 
   if (selected) {
@@ -104,26 +104,41 @@ export default ({ options, selected, setSelected, title  }) => {
     setShow(!show);
   }
 
+  const caretClassList = ['w-4', 'h-4'];
+
+  if (show) {
+    caretClassList.push('rotate-180');
+  }
+
   return (
-      <div className='relative mr-4' id={ id }>
-        <div className='flex hover:text-black text-slate-400' onClick={ toggleShow }>
-          <span className='capitalize'>{ title }</span>
+      <div className={ Dropdown.container } id={ id }>
+        <button
+          className={ Dropdown.actionButton }
+          id={ `${title}-dropdown` }
+          onClick={ toggleShow }
+          type="button"
+        >
           { !!selected.length &&
-            <span className='ml-1 inline-block w-7 h-7 bg-black text-white flex justify-center items-center rounded-full'>{ selected.length }</span>
+              <span className='inline-block w-7 h-5 bg-black text-white flex justify-center items-center rounded-full'>{ selected.length }</span>
           }
-        </div>
-        {
-          show &&
-          <div className='absolute border top-8 z-10 border-b-0 border-black left-0 h-12 w-48'>
-            <div className=''>
+          { title }
+          <svg className={ caretClassList.join(' ') } xmlns="http://www.w3.org/2000/svg"
+               width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+               strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <path d="m6 9 6 6 6-6"/>
+          </svg>
+        </button>
+        { show &&
+          <div className={ Dropdown.menu }>
+            <div className={ Dropdown.inputContainer }>
               <input
-                  className='outline-none p-2 w-full'
+                  className={ Dropdown.input }
                   onChange={ handleInput }
                   placeholder='Search'
                   value={ search }
               />
             </div>
-            <div className='overflow-scroll w-48 border border-t-0 border-black max-h-64 relative -left-px w-full shadow-xl'>
+            <div className={ Dropdown.menuItemContainer }>
               {
                 data.map((option, index) => {
                   const isSelected = selected.includes(option);
@@ -135,7 +150,7 @@ export default ({ options, selected, setSelected, title  }) => {
                   };
 
                   return (
-                      <span key={ index }>
+                      <span key={ index } className={ Dropdown.menuItem }>
                         { Option(d) }
                       </span>
                   );
@@ -144,7 +159,7 @@ export default ({ options, selected, setSelected, title  }) => {
             </div>
           </div>
         }
+
       </div>
   );
-  // return (<div>Filter</div>);
 }

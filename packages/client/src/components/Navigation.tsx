@@ -28,7 +28,7 @@ export default () => {
 
 
   return (
-      <nav className="min-h-screen pl-6 pr-6 pb-6 bg-slate-500 flex flex-col items-end">
+      <nav className="min-h-screen pl-6 pr-6 pb-6 flex flex-col items-end">
         <div className='flex flex-col justify-between mt-10'>
           <div>
 

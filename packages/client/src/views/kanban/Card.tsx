@@ -8,13 +8,12 @@ export default ({ data }) => {
     'border',
     'border-transparent',
     'mb-6',
-    'p-2',
-    'rounded',
+    'pr-2',
+    'rounded-md',
     'shadow-md',
     'hover:shadow-2xl',
     'hover:border-slate-200',
   ];
-
   const priorityCLassList = [
     'border-2',
     'border-black',
@@ -43,7 +42,7 @@ export default ({ data }) => {
   return (
       <div className={ classList.join(' ') }>
         <Link className='no-underline' to={`/documents/${data.id}`}>
-          <div className='flex items-center mb-1'>
+          <div className='flex items-center'>
             <div className={`w-12 h-12 flex justify-center items-center mr-2 rounded bg-${data.type.replace(' ', '-').toLowerCase()}-primary text-white`}>{ data.type[0] }</div>
             <div className='w-64'>
               <div className='text-xs' >{ data.project || '(no project)'}</div>

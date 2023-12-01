@@ -15,6 +15,7 @@ export default {
         'bug-secondary': 'rgba(232, 109, 109, 0.4)',
         'epic-primary': 'rgba(0, 150, 152, 1)',
         'epic-secondary': 'rgba(0, 150, 152, 0.4)',
+        'kanban-primary': 'rgb(237, 234, 209)',
         'task-primary': 'rgba(138, 209, 159, 1)',
         'task-secondary': 'rgba(138, 209, 159, 0.4)',
         'use-case-primary': 'rgba(252, 176, 124, 1)',

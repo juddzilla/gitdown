@@ -1,10 +1,14 @@
-import { useState } from 'react';
-import SelectOption from './select-option';
-import Icons from '../../Icons';
-import Heading from './Heading';
-import Section from './Section';
+import { Fragment, useState } from 'react';
+import { PlusCircleIcon } from '@heroicons/react/24/outline';
+import { Combobox, Dialog, Transition } from '@headlessui/react';
 
-export default (props) => {
+import styles from './styles';
+
+function classNames(...classes) {
+  return classes.filter(Boolean).join(' ')
+}
+
+export default function MultiSelect(props) {
   const {
     allowCreate,
     display,
@@ -14,26 +18,24 @@ export default (props) => {
     setSelected,
     title,
   } = props;
-
-  const [active, setActive] = useState(false);
+  const [query, setQuery] = useState('');
+  const [open, setOpen] = useState(false);
   const [data, setData] = useState(options);
-  const [search, setSearch] = useState('');
 
   function reset() {
-    setSearch('');
+    setQuery('');
     setData([...data]);
   }
 
-  function handleInput({ target }) {
-    setSearch(target.value);
-
-    if (target.value === '') {
+  function handleInput(value) {
+    setQuery(value);
+    if (value === '') {
       setData(options);
       return;
     }
 
     const refined = options.filter(d => {
-      return d.toLowerCase().includes(target.value.toLowerCase());
+      return String(d).toLowerCase().includes(value.toLowerCase());
     });
     setData(refined);
   }
@@ -56,92 +58,116 @@ export default (props) => {
   }
 
   function createNew() {
-    const newOpts = [...options, search].sort();
+    const newOpts = [...options, query].sort();
     setData(newOpts);
-    createSelection(search);
+    createSelection(query);
+    setOpen(false);
   }
 
-  const Selected = ({ value }) => (
-      <div className='border border-slate-300 flex items-center rounded bg-white mr-2 mb-2'>
-        <span className='p-2 pr-0'>
-          { value }
-        </span>
-        <span className='cursor-pointer' onClick={handleSelection.bind(null, value)}>
-          { Icons('x', ['stroke-black', 'scale-50']) }
-        </span>
-      </div>
-  );
-
-  function toggleActive() {
-    setActive(!active);
-    setSearch('');
-    setData([...data]);
-  }
 
   return (
-      <Section>
+      <div className={ ['mb-4', styles.container].join(' ') }>
+        <div className={ styles.heading }>
+          { title }
+        </div>
+        <div className='flex flex-wrap flex-1'>
+          <span className='mr-2 mb-2 inline-flex items-center border border-grey-100 gap-x-0.5 rounded-md bg-white hover:bg-white hover:border-black hover:text-black px-1 py-1 '>
+            <PlusCircleIcon className="w-6 text-gray-400 hover:text-inherit cursor-pointer" aria-hidden="true"  onClick={ setOpen.bind(null, true) } />
+          </span>
+          { selected.map(item => (
+              <span key={ item } className="mr-2 mb-2 inline-flex items-center border border-grey-100 gap-x-0.5 rounded-md bg-gray-100 hover:bg-white hover:border-black px-2 py-1 text-sm font-medium text-gray-600">
+                { item }
+                <button onClick={ handleSelection.bind(null, item) } type="button" className="group relative -mr-1 h-3.5 w-3.5 rounded-sm hover:bg-gray-500/20">
+                  <span className="sr-only">Remove</span>
+                  <svg viewBox="0 0 14 14" className="h-3.5 w-3.5 stroke-gray-700/50 group-hover:stroke-black">
+                    <path d="M4 4l6 6m0-6l-6 6" />
+                  </svg>
+                  <span className="absolute -inset-1" />
+                </button>
+              </span>
+          ))}
+        </div>
+        <Transition.Root show={open} as={Fragment} afterLeave={() => setQuery('')} appear={ false }>
+          <Dialog as="div" className="relative z-10" onClose={setOpen}>
+            <Transition.Child
+                as={Fragment}
+                enter="ease-out duration-300"
+                enterFrom="opacity-0"
+                enterTo="opacity-100"
+                leave="ease-in duration-200"
+                leaveFrom="opacity-100"
+                leaveTo="opacity-0"
+            >
+              <div className="fixed inset-0 bg-gray-500 bg-opacity-25 transition-opacity" />
+            </Transition.Child>
 
-        { Heading({ active, noToggle: false, title, toggleActive }) }
-        { !active ? (
-            <div className='flex flex-wrap p-2 pb-0'>
-              {  (selected && selected.length) ? (
-                  <>
-                    {
-                      selected.map((selection, index) => (
-                        <span key={index}>
-                          <Selected value={selection} />
-                        </span>)
-                      )
-                    }
-                  </>
-              ) : (
-                <span>
-                  No Selection
-                </span>
-              ) }
-            </div>
-        ) : (
-            <div>
-              <div className='border-b-4 border-black'>
-                <input
-                    className='outline-none p-2 w-full'
-                    onChange={ handleInput }
-                    placeholder='Search'
-                    value={ search }
-                />
-              </div>
-              { (allowCreate && !!!data.length) &&
-                <div
-                    className='mt-1 p-2 font-bold bg-black text-white cursor-pointer'
-                    onClick={ createNew }
-                >
-                  Create { search } { display }
-                </div>
-              }
-              { (!allowCreate && !!!data.length) &&
-                  <div
-                      className='p-2 font-bold bg-black text-white'
-                  >
-                    No { display }: { search }
-                  </div>
-              }
-              <div className='overflow-scroll max-h-64 w-full'>
-                {
-                  data.map((option, index) => {
-                    const isSelected = selected.includes(option);
-                    const d = {
-                      index,
-                      onClick: handleSelection.bind(null, option),
-                      option,
-                      selected: isSelected,
-                    };
+            <div className="fixed inset-0 z-10 w-screen overflow-y-auto p-4 sm:p-6 md:p-20">
+              <Transition.Child
+                  as={Fragment}
+                  enter="ease-out duration-300"
+                  enterFrom="opacity-0 scale-95"
+                  enterTo="opacity-100 scale-100"
+                  leave="ease-in duration-200"
+                  leaveFrom="opacity-100 scale-100"
+                  leaveTo="opacity-0 scale-95"
+              >
+                <Dialog.Panel className="mx-auto max-w-xl transform rounded-xl bg-white p-2 shadow-2xl ring-1 ring-black ring-opacity-5 transition-all">
+                  <Combobox onChange={(item) => handleSelection(item)}>
+                    <Combobox.Input
+                        className="w-full rounded-md border-0 bg-gray-100 px-4 py-2.5 text-gray-900 focus:ring-0 sm:text-sm"
+                        placeholder="Search..."
+                        onChange={(event) => handleInput(event.target.value)}
+                    />
 
-                    return ( SelectOption(d) );
-                  })
-                }
-              </div>
+                    { data.length > 0 && (
+                        <Combobox.Options
+                            static
+                            className="-mb-2 max-h-72 scroll-py-2 overflow-y-auto py-2 text-sm text-gray-800"
+                        >
+                          { data.map((d) => {
+                            if (selected.includes(d)) {
+                              return null;
+                            }
+
+                            return (
+                                <Combobox.Option
+                                    key={ d }
+                                    value={ d }
+                                    className={({ active }) =>
+                                        classNames(
+                                            'cursor-default select-none rounded-md px-4 py-2',
+                                            active && 'bg-indigo-600 text-white'
+                                        )
+                                    }
+                                >
+                                  { d }
+                                </Combobox.Option>
+                            )
+
+                          })}
+                        </Combobox.Options>
+                    )}
+
+                    {query !== '' && data.length === 0 && (
+                        <div className="px-4 py-14 text-center sm:px-14">
+                          <p className="mb-6 text-sm text-gray-900">No { title } found for "{ query }" </p>
+                          { allowCreate &&
+                              <button
+                                  onClick={ createNew }
+                                  type="button"
+                                  className="rounded bg-indigo-600 px-2 py-1 text-lg  font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                              >
+                                Create { query }
+                              </button>
+                          }
+                        </div>
+                    )}
+                  </Combobox>
+                </Dialog.Panel>
+              </Transition.Child>
             </div>
-        ) }
-      </Section>
+          </Dialog>
+        </Transition.Root>
+      </div>
   )
 }

@@ -9,11 +9,12 @@ export default (params): ReactElement => {
 
 
   function onChoice(selection) {
+    console.log('selection', selection);
     update({ ...metadata, ...selection });
   }
 
   return (
-      <div className="">
+      <>
         { ['bug', 'task'].includes(metadata.type.toLowerCase()) &&
             <>
               { Calendar({
@@ -27,7 +28,6 @@ export default (params): ReactElement => {
         }
 
         <SingleSelect
-            display={ 'Priority' }
             options={ list.priorities }
             property={ 'priority' }
             selected={ metadata.priority }
@@ -36,7 +36,6 @@ export default (params): ReactElement => {
         />
 
         <SingleSelect
-            display={ 'Status' }
             options={ list.statuses }
             property={ 'status' }
             selected={ metadata.status }
@@ -65,6 +64,6 @@ export default (params): ReactElement => {
               title: 'Users',
             })
           }
-      </div>
+      </>
   );
 }

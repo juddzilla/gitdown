@@ -3,8 +3,7 @@ import localeEn from 'air-datepicker/locale/en';
 
 import airdatepicker from './airdatepicker';
 
-import Section from './Section';
-import Heading from './Heading';
+import styles from './styles';
 
 const monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
 const dayName = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
@@ -56,23 +55,17 @@ export default ({ property, update, value }) => {
     'font-medium',
     'flex',
     'justify-center',
-    'p-2',
     'pb-4'
   ];
 
-  const calendarClassList = ['ml-1'];
+  const calendarClassList = ['relative'];
 
   const hide = showPicker ? singleDateClassList : calendarClassList;
   hide.push('hidden')
 
   return (
-      <Section>
-        { Heading({
-          active: true,
-          noToggle: true,
-          title: 'Due',
-          toggleActive: null,
-        }) }
+      <div className={ ['mb-6', styles.container].join(' ') }>
+        <div className={ [styles.heading, 'pt-1.5'].join(' ') }>Due</div>
         <div className={ singleDateClassList.join(' ')} onClick={ toggle }>
           <div
               className="w-32 flex-none rounded-t lg:rounded-t-none lg:rounded-l text-center shadow-lg ">
@@ -98,6 +91,6 @@ export default ({ property, update, value }) => {
         <div className={ calendarClassList.join(' ') }>
           { airdatepicker(options) }
         </div>
-      </Section>
+      </div>
   );
 }

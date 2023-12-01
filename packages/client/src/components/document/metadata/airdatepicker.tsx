@@ -20,7 +20,12 @@ function airDatepicker(props) {
     dp.current.update({ ...props });
   }, [props]);
 
-  return <div id="datepicker" style={{"--adp-border-color-inline": 'transparent' }} ref={$input} />;
+  return <div
+      className='relative -left-4'
+      id="datepicker"
+      ref={$input}
+      style={{"--adp-border-color-inline": 'transparent' }}
+  />;
 }
 
 export default airDatepicker;

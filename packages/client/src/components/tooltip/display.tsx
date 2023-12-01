@@ -3,9 +3,6 @@ export default (props) => {
     'tooltip-display',
     'flex',
     'items-center',
-    'border',
-    'border-neutral-100',
-    'hover:border-neutral-300',
     'rounded-lg'
   ];
 

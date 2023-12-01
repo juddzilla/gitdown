@@ -174,9 +174,9 @@ const BoardSectionList = (group, tasks, onDrop) => {
           onDragOver={ handleDragOver }
           onDragEnd={ handleDragEnd }
       >
-        <div className='flex h-full'>
+        <div className='flex h-full px-6 overflow-x-scroll relative -top-16'>
           {Object.keys(boardSections).map((boardSectionKey) => (
-              <div className='mr-2 bg-slate-50' key={ boardSectionKey }>
+              <div className='mr-8 shadow-xl rounded-t-lg border border-grey-300' key={ boardSectionKey }>
                 <Droppable
                     id={ [group, boardSectionKey].join(':') }
                     title={ boardSectionKey }

@@ -5,16 +5,16 @@ export default ({ active, noToggle, title, toggleActive }) => {
     'duration-300',
     'ease-linear',
     'scale-75',
-    'absolute',
     'right-0',
   ];
 
   const parentClassList = [
     'relative',
+    'px-2',
+    'w-full',
     'flex',
     'items-center',
-    'justify-center',
-    'w-full',
+    'justify-between',
   ];
 
   if (noToggle) {
@@ -27,11 +27,9 @@ export default ({ active, noToggle, title, toggleActive }) => {
   }
 
   return (
-      <div className='bg-slate-50 border-b-0 rounded flex items-center justify-between h-9'>
+      <div className=' h-9'>
         <div className={ parentClassList.join(' ') } onClick={ toggleActive }>
-          <span className='text-xs uppercase'>
-            { title }
-          </span>
+          <h2 className="text-sm font-semibold leading-6 text-gray-900">{ title }</h2>
           <div className={ activeClassList.join(' ') }>
             { Icons('arrowDown', ['stroke-black', 'scale-75']) }
           </div>

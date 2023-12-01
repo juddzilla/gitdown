@@ -1,4 +1,4 @@
-import Filter from './filter';
+import Filter from './Filter';
 const all = () => ([
   'statuses',
   'priorities',

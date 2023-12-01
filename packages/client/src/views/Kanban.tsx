@@ -2,42 +2,16 @@ import { useEffect, useRef, useState  } from 'react';
 import { useLoaderData } from 'react-router-dom';
 import API from '../interfaces/host';
 import ENV from '../interfaces/environment';
-import Icon from '../components/Icons';
 import Filters from './kanban/Filters';
 import DndContext from './kanban/dnd/Context';
 const initialGroup = 'priority';
+
+import Grouping from './kanban/Grouping';
 
 const { WSHost } = ENV;
 
 const request = async (params) => await API.Kanban(params);
 const move = async (params) => await API.KanbanMove(params);
-
-const groups = [
-  {
-    display: 'Status',
-    name: 'status',
-  },
-  {
-    display: 'Priority',
-    name: 'priority',
-  },
-  {
-    display: 'Projects',
-    name: 'project',
-  },
-  {
-    display: 'Type',
-    name: 'type',
-  },
-  {
-    display: 'Tags',
-    name: 'tags',
-  },
-  {
-    display: 'Users',
-    name: 'users',
-  }
-];
 
 const initialFilters = {
   statuses: [],
@@ -132,8 +106,8 @@ const Component = () => {
     return () => webSocket.current.close();
   }, [group]);
 
-  async function chooseGroup({ target }) {
-    setGroup(target.value);
+  async function chooseGroup(target) {
+    setGroup(target);
   }
 
   function setSelected(key, values) {
@@ -183,28 +157,26 @@ const Component = () => {
     await move({ id: item.id, metadata: updatedItem });
   }
 
-  const filterIcon = Object.values(filters).some(filter => filter.length) ? 'filterActive' : 'filter';
   const groupingOn = Object.keys(filterMap).find(key => filterMap[key] === group);
+
   return (
       <div className='h-full'>
-        <h1>Kanban</h1>
-        <div className='flex items-center mb-4 h-12 mr-2'>
-          <div className='flex items-center mr-8 border border-gray-200 rounded-lg px-2'>
-            { Icon('columns', 'stroke-black') }
-            <select value={group} onChange={ chooseGroup } className="outline-none py-3 px-1 pe-9 block w-full border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none">
-              { groups.map((option, index) => (
-                  <option value={option.name} key={index}>
-                    { option.display }
-                  </option>
-              ))}
-            </select>
-          </div>
-          <div className='flex items-center mr-4' >
-            { Filters({ filters, groupingOn, list: results.list, onSelect: setSelected }) }
-          </div>
+        <div className='pt-12 pb-32 bg-slate-800 px-8'>
+          <div className='mx-auto max-w-5xl w-full'>
+            <div className="min-w-0 flex-1 flex items-center mb-4">
+              <h1 className="mt-2 text-6xl font-bold text-white ">
+                Kanban
+              </h1>
 
+            </div>
+            <div className='flex items-center' >
+              <Grouping selected={ group } choose={ chooseGroup }/>
+              { Filters({ filters, groupingOn, list: results.list, onSelect: setSelected }) }
+            </div>
+          </div>
         </div>
-        <div className=' h-full'>
+
+        <div className='h-full'>
           { DndContext(group, data, onDrop) }
         </div>
       </div>

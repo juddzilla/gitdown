@@ -5,7 +5,7 @@ created: 1700194147184
 due: 1700194144902
 priority: 3
 status: 
-type: UseCase
+type: Use Case
 project: sub
 title: mn,mn
 id: ADTl9CdDg1LDZNqtykgrm

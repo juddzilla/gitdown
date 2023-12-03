@@ -15,3 +15,6 @@ id: 7DmTgXBmqQpwFaNTJ3Iqr
 ## This Is A Bug
 
 Bug templateddd
+
+- [] checklist?
+- [ ] checklist2?

@@ -2,7 +2,7 @@
 tags: [tagF]
 users: [user18@email.com, user2@email.com]
 created: 1700360418275
-due: 
+due: null
 priority: 1
 status: In Progress
 type: Bug
@@ -16,5 +16,6 @@ id: 7DmTgXBmqQpwFaNTJ3Iqr
 
 Bug templateddd
 
--[] checklist?
-- [ ] checklist2?
+\-\[\] checklist?
+
+* \[ \] checklist2?

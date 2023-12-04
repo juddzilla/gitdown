@@ -16,6 +16,6 @@ id: 7DmTgXBmqQpwFaNTJ3Iqr
 
 Bug templateddd
 
-\-\[\] checklist?
+- [] checklist?
 
-* \[ \] checklist2?
+- [ ] checklist2?
